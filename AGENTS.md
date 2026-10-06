@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Marketing home page lives in src/marketing/ (markup string, scoped CSS, vanilla interaction script initialised from the index route) — ported 1:1 from the approved HTML design so its demos keep working.
