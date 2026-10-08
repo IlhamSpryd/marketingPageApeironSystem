@@ -63,10 +63,12 @@ export function initMarketing(): () => void {
     const hDate = document.getElementById('hero-date');
     const hTime = document.getElementById('hero-time');
     if (hDate && hTime) {
+      // Use a coherent simulated business time starting at 14:22:00
+      let simTime = new Date('2026-10-06T14:22:00');
       const updateTime = () => {
-        const now = new Date();
-        hDate.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        hTime.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        // Date is preserved as Oct 6, 2026
+        hTime.textContent = simTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        simTime.setSeconds(simTime.getSeconds() + 1);
       };
       updateTime();
       const clockIv = setInterval(updateTime, 1000);
