@@ -62,13 +62,20 @@ export function initMarketing(): () => void {
        ═══════════════════════════════════════════════════════════════ */
     const hDate = document.getElementById('hero-date');
     const hTime = document.getElementById('hero-time');
+    const bTime = document.getElementById('branch-time');
+    
     if (hDate && hTime) {
-      // Use a coherent simulated business time starting at 14:22:00
-      let simTime = new Date('2026-10-06T14:22:00');
       const updateTime = () => {
-        // Date is preserved as Oct 6, 2026
-        hTime.textContent = simTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        simTime.setSeconds(simTime.getSeconds() + 1);
+        const now = new Date();
+        const dStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const tStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        hDate.innerHTML = dStr + ' &middot; ';
+        hTime.innerHTML = tStr + ' &middot; ';
+        
+        if (bTime) {
+          bTime.innerHTML = dStr + ' &middot; ' + tStr;
+        }
       };
       updateTime();
       const clockIv = setInterval(updateTime, 1000);
