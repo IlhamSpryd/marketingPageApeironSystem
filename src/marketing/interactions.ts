@@ -22,7 +22,8 @@ export function initMarketing(): () => void {
   const lenis = reduce ? null : new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
   if (lenis) {
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    const tickLenis = (time: number) => { lenis.raf(time * 1000); };
+    gsap.ticker.add(tickLenis);
     gsap.ticker.lagSmoothing(0);
   }
 
@@ -32,17 +33,19 @@ export function initMarketing(): () => void {
        NAV
        ═══════════════════════════════════════════════════════════════ */
     const nav = $('#nav'), burger = $('#burger'), menu = $('#menu');
-    burger.addEventListener('click', () => {
-      const open = menu.hidden; menu.hidden = !open;
-      burger.setAttribute('aria-expanded', String(open));
-      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      nav.classList.toggle('scrolled', open || scrollY > 12);
-    });
-    $$('a', menu).forEach((a: HTMLElement) => a.addEventListener('click', () => {
-      menu.hidden = true;
-      burger.setAttribute('aria-expanded', 'false');
-      burger.setAttribute('aria-label', 'Open menu');
-    }));
+    if (burger && menu && nav) {
+      burger.addEventListener('click', () => {
+        const open = menu.hidden; menu.hidden = !open;
+        burger.setAttribute('aria-expanded', String(open));
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        nav.classList.toggle('scrolled', open || scrollY > 12);
+      }, { signal: ac.signal });
+      $$('a', menu).forEach((a: HTMLElement) => a.addEventListener('click', () => {
+        menu.hidden = true;
+        burger.setAttribute('aria-expanded', 'false');
+        burger.setAttribute('aria-label', 'Open menu');
+      }, { signal: ac.signal }));
+    }
 
     // Nav scroll state
     ScrollTrigger.create({
@@ -393,10 +396,10 @@ export function initMarketing(): () => void {
   const ptabs = $('#ptabs'), items = $('#items'), lines = $('#cartLines'), foot = $('#cartFoot');
 
   function renderMenu() {
-    ptabs.innerHTML = Object.keys(MENU).map(k =>
+    if (ptabs) ptabs.innerHTML = Object.keys(MENU).map(k =>
       `<button class="ptab" role="tab" aria-selected="${k === tab}" data-tab="${k}">${k}</button>`
     ).join('');
-    items.innerHTML = MENU[tab].map(([n, p]) =>
+    if (items) items.innerHTML = MENU[tab].map(([n, p]) =>
       `<button class="item" data-add="${n}" data-price="${p}"><b>${n}</b><span>${idr(p)}</span></button>`
     ).join('');
   }
@@ -408,13 +411,13 @@ export function initMarketing(): () => void {
   }
 
   function renderCart() {
-    lines.innerHTML = cart.length ? cart.map((l, i) => `
+    if (lines) lines.innerHTML = cart.length ? cart.map((l, i) => `
       <div class="cl"><div><div class="cl-n">${l.qty}× ${l.name}</div>${l.mods.map(m => `<div class="cl-m">${m}</div>`).join('')}
         <div class="stepper"><button data-dec="${i}" aria-label="Remove one ${l.name}">−</button><button data-inc="${i}" aria-label="Add one ${l.name}">+</button></div></div>
         <div class="cl-p">${idr(l.unit * l.qty)}</div></div>`).join('')
       : '<p class="cart-empty">Select items to start an order.</p>';
     const t = totals();
-    foot.innerHTML = `<div class="tot"><span>Subtotal</span><span>${idr(t.sub)}</span></div>
+    if (foot) foot.innerHTML = `<div class="tot"><span>Subtotal</span><span>${idr(t.sub)}</span></div>
       <div class="tot"><span>Tax (PB1, 10%)</span><span>${idr(t.tax)}</span></div>
       <div class="tot grand"><span>Total</span><span>Rp ${idr(t.total)}</span></div>
       <button class="charge${charging ? ' paid' : ''}" data-charge ${(!cart.length && !charging) ? 'disabled' : ''}>${charging ? `Paid · Order #${nextOrder - 1}` : `Charge Rp ${idr(t.total)}`}</button>`;
@@ -465,18 +468,20 @@ export function initMarketing(): () => void {
   }
 
   function renderKDS(moved?: number) {
-    board.innerHTML = STAGES.map((s, i) => {
+    if (board) board.innerHTML = STAGES.map((s, i) => {
       const list = T.filter(t => t.stage === i); const shown = i === 3 ? list.slice(-3) : list;
       return `<section class="kcol" aria-label="${s}"><h3 class="kh"><span>${s}</span><span class="kc">${list.length}</span></h3>${shown.map(t => ticket(t, moved)).join('') || '<p class="kempty">No tickets</p>'}</section>`;
     }).join('');
   }
 
-  board.addEventListener('click', (e: Event) => {
-    const b = (e.target as HTMLElement).closest('[data-adv]') as HTMLElement; if (!b) return;
-    const t = T.find(x => x.id === +b.dataset.adv!); t!.stage++; if (t!.stage === 3) t!.end = nowMs();
-    renderKDS(t!.id);
-    const nb = board.querySelector(`[data-adv="${t!.id}"]`) as HTMLElement; if (nb) nb.focus();
-  });
+  if (board) {
+    board.addEventListener('click', (e: Event) => {
+      const b = (e.target as HTMLElement).closest('[data-adv]') as HTMLElement; if (!b) return;
+      const t = T.find(x => x.id === +b.dataset.adv!); t!.stage++; if (t!.stage === 3) t!.end = nowMs();
+      renderKDS(t!.id);
+      const nb = board.querySelector(`[data-adv="${t!.id}"]`) as HTMLElement; if (nb) nb.focus();
+    }, { signal: ac.signal });
+  }
 
   const iv = setInterval(() => {
     $$('[data-t]', board).forEach((s: HTMLElement) => {
@@ -505,7 +510,7 @@ export function initMarketing(): () => void {
   const sTb = $('#stockTbl tbody'), lTb = $('#ledgerTbl tbody');
 
   function renderStock(deltas?: Record<string, number>) {
-    sTb.innerHTML = Object.entries(stock).map(([k, s]) => {
+    if (sTb) sTb.innerHTML = Object.entries(stock).map(([k, s]) => {
       const low = s.v < s.low;
       const d = deltas && deltas[k] ? `<span class="delta">−${deltas[k]} ${s.u}</span>` : '';
       return `<tr><td>${s.n}</td><td class="r tnum">${qty(s.v)} ${s.u}${d}</td><td><span class="badge ${low ? 'warn' : 'ok'}">${low ? 'Low' : 'Optimal'}</span></td></tr>`;
@@ -513,14 +518,14 @@ export function initMarketing(): () => void {
   }
 
   function renderLedger(fresh?: number) {
-    lTb.innerHTML = ledger.slice(0, 6).map((r, i) =>
+    if (lTb) lTb.innerHTML = ledger.slice(0, 6).map((r, i) =>
       `<tr class="${fresh && i < fresh ? 'new' : ''}"><td>${r.t}</td><td>${r.ty}</td><td>${r.it}</td><td class="r tnum ${r.pos ? 'pos-v' : 'neg'}">${r.ch}</td><td>${r.ref}</td></tr>`
     ).join('');
   }
 
   const chain = $$('#chain li'), sell = $('#sellBtn');
   let busy = false;
-  sell.addEventListener('click', () => {
+  if (sell) sell.addEventListener('click', () => {
     if (busy) return; busy = true; sell.disabled = true; sell.style.opacity = '.6';
     chain.forEach((li: HTMLElement) => li.classList.remove('on'));
     const step = reduce ? 0 : 240, order = nextOrder++;
@@ -540,7 +545,7 @@ export function initMarketing(): () => void {
       }
       if (i === 4) { busy = false; sell.disabled = false; sell.style.opacity = ''; }
     }, i * step));
-  });
+  }, { signal: ac.signal });
   renderStock(); renderLedger();
 
   /* ═══════════════════════════════════════════════════════════════
@@ -576,18 +581,18 @@ export function initMarketing(): () => void {
 
   function showB(k: string) {
     const d = B[k];
-    bpanel.innerHTML = `<table class="tbl"><thead><tr>${d.h.map((x: string, i: number) => `<th class="${d.al[i] ? 'r' : ''}">${x}</th>`).join('')}</tr></thead><tbody>${d.rows.map((r: any[]) => `<tr>${d.f(r)}</tr>`).join('')}</tbody></table>`;
+    if (bpanel) bpanel.innerHTML = `<table class="tbl"><thead><tr>${d.h.map((x: string, i: number) => `<th class="${d.al[i] ? 'r' : ''}">${x}</th>`).join('')}</tr></thead><tbody>${d.rows.map((r: any[]) => `<tr>${d.f(r)}</tr>`).join('')}</tbody></table>`;
     btabs.forEach((b: HTMLElement) => { const on = (b as any).dataset.bt === k; b.setAttribute('aria-selected', String(on)); (b as HTMLElement).tabIndex = on ? 0 : -1; });
-    bpanel.setAttribute('aria-labelledby', 'bt-' + k);
+    if (bpanel) bpanel.setAttribute('aria-labelledby', 'bt-' + k);
   }
 
   btabs.forEach((b: HTMLElement, i: number) => {
-    b.addEventListener('click', () => showB((b as any).dataset.bt));
+    b.addEventListener('click', () => showB((b as any).dataset.bt), { signal: ac.signal });
     b.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
       const n = btabs[(i + (e.key === 'ArrowRight' ? 1 : btabs.length - 1)) % btabs.length] as HTMLElement;
       showB((n as any).dataset.bt); n.focus();
-    });
+    }, { signal: ac.signal });
   });
   showB('sales');
 
@@ -862,6 +867,6 @@ export function initMarketing(): () => void {
     clearInterval(iv);
     cleanupParticles();
     ctx.revert();
-    if (lenis) lenis.destroy();
+    if (lenis) { gsap.ticker.remove(tickLenis); lenis.destroy(); }
   };
 }
