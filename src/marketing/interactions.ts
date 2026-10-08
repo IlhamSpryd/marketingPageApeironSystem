@@ -20,9 +20,10 @@ export function initMarketing(): () => void {
   gsap.registerPlugin(ScrollTrigger);
 
   const lenis = reduce ? null : new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
+  let tickLenis: any;
   if (lenis) {
     lenis.on('scroll', ScrollTrigger.update);
-    const tickLenis = (time: number) => { lenis.raf(time * 1000); };
+    tickLenis = (time: number) => { lenis.raf(time * 1000); };
     gsap.ticker.add(tickLenis);
     gsap.ticker.lagSmoothing(0);
   }
