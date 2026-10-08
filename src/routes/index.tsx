@@ -22,6 +22,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    scripts: [{ children: "document.documentElement.classList.add('js-enabled');" }],
   }),
   component: Index,
 });
