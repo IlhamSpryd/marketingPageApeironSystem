@@ -58,6 +58,22 @@ export function initMarketing(): () => void {
     });
 
     /* ═══════════════════════════════════════════════════════════════
+       HERO CLOCK — Living state without fake data
+       ═══════════════════════════════════════════════════════════════ */
+    const hDate = document.getElementById('hero-date');
+    const hTime = document.getElementById('hero-time');
+    if (hDate && hTime) {
+      const updateTime = () => {
+        const now = new Date();
+        hDate.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        hTime.textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      };
+      updateTime();
+      const clockIv = setInterval(updateTime, 1000);
+      ac.signal.addEventListener('abort', () => clearInterval(clockIv));
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
        HERO ENTRANCE — Orchestrated timeline
        ═══════════════════════════════════════════════════════════════ */
     const heroTl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1 } });
