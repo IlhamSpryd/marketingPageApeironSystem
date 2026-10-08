@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
-import logo from "@/assets/apeiron-logo.png.asset.json";
+import logoUrl from "@/assets/logo.png";
 import { markup } from "@/marketing/markup";
 import { initMarketing } from "@/marketing/interactions";
 import "@/marketing/marketing.css";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const html = useMemo(() => markup.split("__LOGO__").join(logo.url), []);
+  const html = useMemo(() => markup.split("__LOGO__").join(logoUrl), []);
   useEffect(() => initMarketing(), []);
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }
