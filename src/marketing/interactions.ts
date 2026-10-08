@@ -3,6 +3,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { MARKETING_STATE } from './marketingState';
 
 export function initMarketing(): () => void {
   const ac = new AbortController();
@@ -81,16 +82,79 @@ export function initMarketing(): () => void {
       const clockIv = setInterval(updateTime, 1000);
       ac.signal.addEventListener('abort', () => clearInterval(clockIv));
     }
-
     /* ═══════════════════════════════════════════════════════════════
-       HERO ENTRANCE — Orchestrated timeline
+       HERO ENTRANCE — Cinematic First-Visit Experience
        ═══════════════════════════════════════════════════════════════ */
+    let isFirstVisit = true;
+    try {
+      isFirstVisit = !sessionStorage.getItem('apeiron_cinematic_played');
+      if (isFirstVisit) sessionStorage.setItem('apeiron_cinematic_played', '1');
+    } catch (e) {
+      // Storage unavailable; fallback to true so causality is shown.
+    }
+
     const heroTl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1 } });
     const inEls = $$('[data-in]');
+    
+    // Elements for the sequence
+    const kpiSales = $('#kpi-sales');
+    const kpiTx = $('#kpi-tx');
+    const fAlert = $('#f-alert');
+    const fPos = $('.f-pos');
+    const r1044 = $('#r-1044');
+    const appMain = $('.app-main');
 
     if (!reduce && inEls.length) {
-      gsap.set(inEls, { autoAlpha: 0, y: 28 });
-      heroTl.to(inEls, { autoAlpha: 1, y: 0, stagger: 0.1, delay: 0.15 });
+      if (kpiSales && kpiTx && fAlert && fPos && r1044 && appMain) {
+        // --- CINEMATIC SEQUENCE ---
+        // 1. Hide DOM nodes *before* zeroing text to prevent flash to zero.
+        gsap.set(inEls, { autoAlpha: 0, y: 28 });
+        gsap.set(appMain, { autoAlpha: 0, scale: 0.98 });
+        gsap.set(fPos, { autoAlpha: 0, x: -20 });
+        gsap.set(fAlert, { autoAlpha: 0, x: 20 });
+        gsap.set(r1044, { opacity: 0, y: 10 });
+        
+        // 2. Zero text synchronously while hidden.
+        const interp = { sales: 0, tx: 0 };
+        kpiSales.textContent = 'Rp 0.00M';
+        kpiTx.textContent = '0';
+        
+        // 3. Cinematic Orchestration
+        heroTl.to(inEls, { autoAlpha: 1, y: 0, stagger: 0.1, delay: 0.15 })
+              .to(appMain, { autoAlpha: 1, scale: 1, duration: 0.8 }, '-=0.5')
+              .to(fPos, { autoAlpha: 1, x: 0, duration: 0.8 }, '-=0.4')
+              .to(r1044, { opacity: 1, y: 0, duration: 0.4 })
+              // Transaction Catalyst (Glow)
+              .to(r1044, { scale: 1.02, backgroundColor: 'rgba(255,165,0,0.1)', yoyo: true, repeat: 1, duration: 0.2 }, '+=0.2')
+              // Dashboard Ripple Highlight
+              .to(appMain, { borderColor: 'rgba(255,165,0,0.5)', yoyo: true, repeat: 1, duration: 0.3 }, '-=0.1')
+              // Propagation Scrub
+              .to(interp, { 
+                sales: MARKETING_STATE.sales, 
+                duration: 1.2, 
+                ease: 'power2.out', 
+                onUpdate: () => { kpiSales.textContent = `Rp ${interp.sales.toFixed(2)}M`; } 
+              }, '-=0.2')
+              .to(interp, { 
+                tx: MARKETING_STATE.tx, 
+                duration: 1.2, 
+                ease: 'power2.out', 
+                onUpdate: () => { kpiTx.textContent = Math.round(interp.tx).toString(); } 
+              }, '<')
+              .to(fAlert, { autoAlpha: 1, x: 0, duration: 0.6 }, '<0.2');
+              
+        // Fast replay for returning visitors (2x playback)
+        if (!isFirstVisit) {
+          heroTl.timeScale(2.0);
+        }
+      } else {
+        // --- FALLBACK FAST ENTRANCE ---
+        gsap.set(inEls, { autoAlpha: 0, y: 28 });
+        heroTl.to(inEls, { autoAlpha: 1, y: 0, stagger: 0.1, delay: 0.15 });
+      }
+    } else if (reduce && inEls.length) {
+      // Reduced motion fallback
+      gsap.set(inEls, { autoAlpha: 1 });
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -139,21 +203,18 @@ export function initMarketing(): () => void {
       );
 
       // Float cards parallax with scroll
-      const fPos = $('.f-pos'), fAlert = $('.f-alert');
       if (fPos) {
-        gsap.fromTo(fPos,
-          { y: 20, autoAlpha: 0 },
+        gsap.to(fPos,
           {
-            y: -24, autoAlpha: 1, ease: 'none',
+            y: -24, ease: 'none',
             scrollTrigger: { trigger: stage, start: 'top 80%', end: 'top 10%', scrub: 1.5 }
           }
         );
       }
       if (fAlert) {
-        gsap.fromTo(fAlert,
-          { y: 30, autoAlpha: 0 },
+        gsap.to(fAlert,
           {
-            y: -18, autoAlpha: 1, ease: 'none',
+            y: -18, ease: 'none',
             scrollTrigger: { trigger: stage, start: 'top 75%', end: 'top 15%', scrub: 1.8 }
           }
         );
