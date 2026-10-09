@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Marketing home page lives in src/marketing/ (markup string, scoped CSS, vanilla interaction script initialised from the index route) — ported 1:1 from the approved HTML design so its demos keep working.
+
+- When interacting with Cloudflare, use the cf CLI unless the project has a Wrangler configuration file.
