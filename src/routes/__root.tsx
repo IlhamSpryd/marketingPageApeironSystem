@@ -94,7 +94,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
       },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      // Favicons derived from the Apeiron mark. The mark is white, so the
+      // light-scheme variant is the same mark in near-black on a white disc;
+      // otherwise it would be invisible on a light tab strip.
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: "/favicon-dark.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      { rel: "apple-touch-icon", href: "/favicon-dark.png" },
     ],
   }),
   shellComponent: RootShell,

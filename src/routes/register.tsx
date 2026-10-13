@@ -46,7 +46,6 @@ function RegisterPage() {
             className="flex items-center gap-3 transition-opacity hover:opacity-90"
             aria-label="Kembali ke Beranda Apeiron"
           >
-            <img src={logoUrl} alt="Apeiron System" className="h-8 w-8 object-contain" />
             <span className="font-semibold text-base sm:text-lg tracking-tight text-[#F7F6F2]">
               Apeiron{" "}
               <small className="text-xs uppercase tracking-wider text-[#A9A79E] font-normal ml-1">

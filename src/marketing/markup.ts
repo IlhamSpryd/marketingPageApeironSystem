@@ -8,7 +8,6 @@ export const markup = `
   <div class="wrap nav-in">
     <div class="nav-l">
       <a class="logo" href="#top" aria-label="Apeiron Systems — home">
-        <img src="__LOGO__" alt="Apeiron Systems" class="nav-logo-img" width="30" height="30" />
         <span>Apeiron <small>Systems</small></span>
       </a>
       <ul class="links" id="nav-links">
@@ -263,7 +262,6 @@ export const markup = `
           <div class="app">
             <aside class="app-side" aria-hidden="true">
               <div class="org">
-                <img src="__LOGO__" alt="Apeiron" width="20" height="20" class="org-icon" />
                 <span>Apeiron</span>
               </div>
               <div class="grp">HQ operations</div>
