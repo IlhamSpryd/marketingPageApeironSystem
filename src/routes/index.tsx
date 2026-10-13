@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
 import logoUrl from "@/assets/logo.png";
+import footerBrandUrl from "@/assets/footer_brand.png";
 import { markup } from "@/marketing/markup";
 import { initMarketing } from "@/marketing/interactions";
 import "@/marketing/marketing.css";
@@ -36,6 +37,8 @@ function Index() {
     return markup
       .split("__LOGO__")
       .join(logoUrl)
+      .split("__FOOTER_LOGO__")
+      .join(footerBrandUrl)
       .split('href="#start">Get Started</a>')
       .join('href="/register">Get Started</a>')
       .split('href="#start">Contact sales</a>')

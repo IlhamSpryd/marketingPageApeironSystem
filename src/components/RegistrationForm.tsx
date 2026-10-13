@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import type {
-  ProvisioningResult,
-  ProvisioningSuccessResult,
-} from "@/types/provisioning";
+import type { ProvisioningResult, ProvisioningSuccessResult } from "@/types/provisioning";
 
 interface FormState {
   tenant_name: string;
@@ -21,21 +18,26 @@ export function RegistrationForm() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPendingNotice, setIsPendingNotice] = useState(false);
   const [successResult, setSuccessResult] = useState<ProvisioningSuccessResult | null>(null);
 
   const posLoginUrl =
-    (typeof window !== "undefined" && (window as any).__ENV__?.VITE_APEIRON_POS_LOGIN_URL) ||
+    (typeof window !== "undefined" &&
+      (window as unknown as { __ENV__?: { VITE_APEIRON_POS_LOGIN_URL?: string } }).__ENV__
+        ?.VITE_APEIRON_POS_LOGIN_URL) ||
     "http://localhost:8000/login";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errorMessage) setErrorMessage(null);
+    if (isPendingNotice) setIsPendingNotice(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setIsPendingNotice(false);
 
     // Client-side quick validation
     if (!formData.tenant_name.trim()) {
@@ -59,7 +61,7 @@ export function RegistrationForm() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           tenant_name: formData.tenant_name.trim(),
@@ -72,13 +74,20 @@ export function RegistrationForm() {
       const json = (await res.json()) as ProvisioningResult;
       if (json.success) {
         setSuccessResult(json as ProvisioningSuccessResult);
+      } else if ((json as { error?: string }).error === "provisioning_pending") {
+        // M-A03: provisioning masih diproses POS — data tidak gagal, jadi ini
+        // bukan banner error merah, melainkan pemberitahuan tenang.
+        setIsPendingNotice(true);
+        setErrorMessage(json.message || null);
       } else {
         setErrorMessage(json.message || "Gagal melakukan registrasi.");
       }
-    } catch (err: any) {
-      setErrorMessage(
-        err?.message || "Terjadi kesalahan saat menghubungi server. Pastikan jaringan terhubung."
-      );
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Terjadi kesalahan saat menghubungi server. Pastikan jaringan terhubung.";
+      setErrorMessage(message);
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +105,7 @@ export function RegistrationForm() {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto rounded-3xl border border-[#2E2D29] bg-[#1B1A18]/95 p-8 sm:p-10 shadow-2xl backdrop-blur-md transition-all text-[#E9E8E3]">
+    <div className="w-full max-w-xl mx-auto rounded-3xl border border-white/[0.08] bg-[#0B0B0C]/90 p-8 sm:p-10 shadow-2xl backdrop-blur-xl transition-all text-[#E4E4E7]">
       {successResult ? (
         <div className="space-y-6 text-center animate-in fade-in zoom-in-95 duration-300">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 shadow-sm">
@@ -120,18 +129,18 @@ export function RegistrationForm() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#2E2D29] bg-[#141413] p-5 text-left text-sm space-y-2.5">
-            <div className="flex justify-between items-center pb-2 border-b border-[#2E2D29]">
-              <span className="text-[#8F8D85] font-medium">Bisnis</span>
-              <span className="font-semibold text-[#F7F6F2]">{formData.tenant_name}</span>
+          <div className="rounded-2xl border border-white/[0.08] bg-black/60 p-5 text-left text-sm space-y-2.5">
+            <div className="flex justify-between items-center pb-2 border-b border-white/[0.06]">
+              <span className="text-[#A1A1AA] font-medium">Bisnis</span>
+              <span className="font-semibold text-white">{formData.tenant_name}</span>
             </div>
-            <div className="flex justify-between items-center pb-2 border-b border-[#2E2D29]">
-              <span className="text-[#8F8D85] font-medium">Pemilik</span>
-              <span className="font-semibold text-[#F7F6F2]">{formData.owner_name}</span>
+            <div className="flex justify-between items-center pb-2 border-b border-white/[0.06]">
+              <span className="text-[#A1A1AA] font-medium">Pemilik</span>
+              <span className="font-semibold text-white">{formData.owner_name}</span>
             </div>
-            <div className="flex justify-between items-center pb-2 border-b border-[#2E2D29]">
-              <span className="text-[#8F8D85] font-medium">Email</span>
-              <span className="font-semibold text-[#F7F6F2]">{formData.owner_email}</span>
+            <div className="flex justify-between items-center pb-2 border-b border-white/[0.06]">
+              <span className="text-[#A1A1AA] font-medium">Email</span>
+              <span className="font-semibold text-white">{formData.owner_email}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-[#8F8D85] font-medium">Tenant ID</span>
@@ -148,7 +157,8 @@ export function RegistrationForm() {
                 Mode Lokal: Tautan Aktivasi Langsung Tersedia
               </div>
               <p className="text-amber-200/90 leading-relaxed">
-                Email simulasi telah tercatat di Outbox. Anda dapat langsung mengaktifkan akun dan menetapkan password sekarang:
+                Email simulasi telah tercatat di Outbox. Anda dapat langsung mengaktifkan akun dan
+                menetapkan password sekarang:
               </p>
               <a
                 href={successResult.onboarding.activation_url}
@@ -162,8 +172,10 @@ export function RegistrationForm() {
               <p className="font-semibold text-blue-300 mb-1">Cek Email Anda</p>
               <p>
                 Tautan aktivasi akun Owner telah dikirim ke{" "}
-                <span className="font-medium text-white">{successResult.onboarding.email_sent_to}</span>.
-                Buka email tersebut untuk mengatur kata sandi Anda.
+                <span className="font-medium text-white">
+                  {successResult.onboarding.email_sent_to}
+                </span>
+                . Buka email tersebut untuk mengatur kata sandi Anda.
               </p>
             </div>
           )}
@@ -171,7 +183,7 @@ export function RegistrationForm() {
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <a
               href={posLoginUrl}
-              className="flex-1 inline-flex items-center justify-center rounded-xl bg-[#F7F6F2] text-[#141413] px-5 py-3 text-sm font-semibold shadow-sm hover:bg-white transition active:scale-[0.99]"
+              className="flex-1 inline-flex items-center justify-center rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold shadow-sm hover:bg-neutral-200 transition active:scale-[0.99]"
             >
               Buka Halaman Login POS
             </a>
@@ -198,7 +210,37 @@ export function RegistrationForm() {
             </p>
           </div>
 
-          {errorMessage && (
+          {isPendingNotice && errorMessage && (
+            <div
+              className="rounded-2xl border border-blue-900/60 bg-blue-950/40 p-4 text-sm text-blue-200 flex items-start gap-3 animate-in fade-in"
+              role="status"
+              aria-live="polite"
+            >
+              <svg
+                className="h-5 w-5 shrink-0 text-blue-400 mt-0.5 animate-pulse"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div>
+                <p className="font-semibold text-blue-200">Registrasi Anda sedang diproses</p>
+                <p className="mt-0.5 text-xs text-blue-300">{errorMessage}</p>
+                <p className="mt-1.5 text-xs text-blue-300/80">
+                  Data Anda sudah kami terima dan tidak akan terdaftar ganda. Silakan coba kirim
+                  ulang beberapa saat lagi, atau hubungi tim kami bila masih berlanjut.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {errorMessage && !isPendingNotice && (
             <div
               className="rounded-2xl border border-rose-900/60 bg-rose-950/50 p-4 text-sm text-rose-300 flex items-start gap-3 animate-in fade-in"
               role="alert"
@@ -225,7 +267,10 @@ export function RegistrationForm() {
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="reg-tenant" className="block text-xs font-semibold uppercase tracking-wider text-[#A9A79E] mb-1.5">
+              <label
+                htmlFor="reg-tenant"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#A9A79E] mb-1.5"
+              >
                 Nama Bisnis / Brand <span className="text-rose-400">*</span>
               </label>
               <input
@@ -236,12 +281,15 @@ export function RegistrationForm() {
                 value={formData.tenant_name}
                 onChange={handleChange}
                 placeholder="Contoh: Kopi Ruang Teduh"
-                className="w-full rounded-xl border border-[#2E2D29] bg-[#141413] px-4 py-3 text-sm text-[#F7F6F2] placeholder-[#6B6A66] focus:bg-[#1C1B19] focus:border-[#E9E8E3] focus:outline-none focus:ring-2 focus:ring-[#E9E8E3]/15 transition"
+                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
               />
             </div>
 
             <div>
-              <label htmlFor="reg-owner" className="block text-xs font-semibold uppercase tracking-wider text-[#A9A79E] mb-1.5">
+              <label
+                htmlFor="reg-owner"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5"
+              >
                 Nama Lengkap Pemilik <span className="text-rose-400">*</span>
               </label>
               <input
@@ -252,12 +300,15 @@ export function RegistrationForm() {
                 value={formData.owner_name}
                 onChange={handleChange}
                 placeholder="Contoh: Budi Santoso"
-                className="w-full rounded-xl border border-[#2E2D29] bg-[#141413] px-4 py-3 text-sm text-[#F7F6F2] placeholder-[#6B6A66] focus:bg-[#1C1B19] focus:border-[#E9E8E3] focus:outline-none focus:ring-2 focus:ring-[#E9E8E3]/15 transition"
+                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
               />
             </div>
 
             <div>
-              <label htmlFor="reg-email" className="block text-xs font-semibold uppercase tracking-wider text-[#A9A79E] mb-1.5">
+              <label
+                htmlFor="reg-email"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5"
+              >
                 Email Bisnis (Login) <span className="text-rose-400">*</span>
               </label>
               <input
@@ -268,13 +319,17 @@ export function RegistrationForm() {
                 value={formData.owner_email}
                 onChange={handleChange}
                 placeholder="budi@kopiruangteduh.com"
-                className="w-full rounded-xl border border-[#2E2D29] bg-[#141413] px-4 py-3 text-sm text-[#F7F6F2] placeholder-[#6B6A66] focus:bg-[#1C1B19] focus:border-[#E9E8E3] focus:outline-none focus:ring-2 focus:ring-[#E9E8E3]/15 transition"
+                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
               />
             </div>
 
             <div>
-              <label htmlFor="reg-phone" className="block text-xs font-semibold uppercase tracking-wider text-[#A9A79E] mb-1.5">
-                Nomor WhatsApp / Telepon <span className="text-[#6B6A66] font-normal">(Opsional)</span>
+              <label
+                htmlFor="reg-phone"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5"
+              >
+                Nomor WhatsApp / Telepon{" "}
+                <span className="text-[#71717A] font-normal">(Opsional)</span>
               </label>
               <input
                 id="reg-phone"
@@ -283,7 +338,7 @@ export function RegistrationForm() {
                 value={formData.owner_phone}
                 onChange={handleChange}
                 placeholder="081234567890"
-                className="w-full rounded-xl border border-[#2E2D29] bg-[#141413] px-4 py-3 text-sm text-[#F7F6F2] placeholder-[#6B6A66] focus:bg-[#1C1B19] focus:border-[#E9E8E3] focus:outline-none focus:ring-2 focus:ring-[#E9E8E3]/15 transition"
+                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
               />
             </div>
           </div>
@@ -292,12 +347,19 @@ export function RegistrationForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#F7F6F2] text-[#141413] px-5 py-3.5 text-sm font-semibold shadow-md hover:bg-white disabled:opacity-60 disabled:cursor-not-allowed transition duration-200 active:scale-[0.99]"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-white text-black px-5 py-3.5 text-sm font-semibold shadow-md hover:bg-neutral-200 disabled:opacity-60 disabled:cursor-not-allowed transition duration-200 active:scale-[0.99]"
             >
               {isLoading ? (
                 <>
-                  <svg className="animate-spin h-4 w-4 text-[#141413]" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <svg className="animate-spin h-4 w-4 text-black" fill="none" viewBox="0 0 24 24">
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
                     <path
                       className="opacity-75"
                       fill="currentColor"
@@ -314,7 +376,10 @@ export function RegistrationForm() {
 
           <p className="text-center text-xs text-[#A9A79E] pt-1">
             Sudah memiliki akun?{" "}
-            <a href={posLoginUrl} className="font-semibold text-[#F7F6F2] hover:text-white underline">
+            <a
+              href={posLoginUrl}
+              className="font-semibold text-[#F7F6F2] hover:text-white underline"
+            >
               Masuk ke Apeiron POS
             </a>
           </p>

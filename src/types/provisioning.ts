@@ -19,6 +19,23 @@ export interface ProvisioningSuccessResult {
   idempotent_replay?: boolean;
 }
 
+/**
+ * POS sedang memproses request asli dengan idempotency key yang sama
+ * (kontrak PROVISIONING.md — `200 OK (Pending Retryable)`).
+ *
+ * Respons ini BUKAN keberhasilan: tidak ada `tenant_id` dan tidak ada
+ * `onboarding`. Pemanggil WAJIB menunggu lalu mengulang request dengan
+ * `X-Idempotency-Key` yang SAMA (timestamp/nonce/signature baru).
+ * Karena itu tipe ini TIDAK dimasukkan ke union `ProvisioningResult` —
+ * memperlakukannya sebagai hasil akan menampilkan layar sukses palsu.
+ */
+export interface ProvisioningPendingResult {
+  success: true;
+  message: string;
+  status: "pending";
+  retryable: true;
+}
+
 export interface ProvisioningErrorResult {
   success: false;
   error: string;

@@ -18,3 +18,19 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+class MockObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+if (typeof window.ResizeObserver === "undefined") {
+  window.ResizeObserver = MockObserver as unknown as typeof ResizeObserver;
+  globalThis.ResizeObserver = MockObserver as unknown as typeof ResizeObserver;
+}
+
+if (typeof window.IntersectionObserver === "undefined") {
+  window.IntersectionObserver = MockObserver as unknown as typeof IntersectionObserver;
+  globalThis.IntersectionObserver = MockObserver as unknown as typeof IntersectionObserver;
+}

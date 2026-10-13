@@ -31,15 +31,15 @@ function RegisterPage() {
     "http://localhost:8000/login";
 
   return (
-    <div className="min-h-screen bg-[#141413] text-[#E9E8E3] flex flex-col justify-between selection:bg-white/20 selection:text-white">
+    <div className="min-h-screen bg-[#000000] text-[#E4E4E7] flex flex-col justify-between selection:bg-white/20 selection:text-white">
       {/* Ambient background lighting */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-stone-800/15 via-[#1B1A18]/10 to-transparent blur-3xl rounded-full" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-stone-900/30 to-transparent blur-3xl rounded-full" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-b from-indigo-500/15 via-sky-500/8 to-transparent blur-3xl rounded-full" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-t from-indigo-600/10 to-transparent blur-3xl rounded-full" />
       </div>
 
       {/* Header */}
-      <header className="relative z-20 border-b border-[#2E2D29] bg-[#141413]/80 backdrop-blur-md sticky top-0">
+      <header className="relative z-20 border-b border-white/[0.08] bg-black/75 backdrop-blur-md sticky top-0">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link
             to="/"
@@ -109,7 +109,7 @@ function RegisterPage() {
       </main>
 
       {/* Minimal Footer */}
-      <footer className="relative z-10 border-t border-[#2E2D29] py-6 px-4 sm:px-6 text-center text-xs text-[#8F8D85]">
+      <footer className="relative z-10 border-t border-white/[0.08] py-6 px-4 sm:px-6 text-center text-xs text-[#A1A1AA]">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© 2026 Apeiron System. Operating system for growing F&amp;B businesses.</p>
           <div className="flex items-center gap-4">

@@ -58,14 +58,15 @@ export default {
             status,
             headers: { "content-type": "application/json" },
           });
-        } catch (err: any) {
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : "Invalid JSON payload";
           return new Response(
             JSON.stringify({
               success: false,
               error: "bad_request",
-              message: err?.message || "Invalid JSON payload",
+              message,
             }),
-            { status: 400, headers: { "content-type": "application/json" } }
+            { status: 400, headers: { "content-type": "application/json" } },
           );
         }
       }
