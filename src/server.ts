@@ -47,6 +47,29 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      if (url.pathname === "/api/register" && request.method === "POST") {
+        try {
+          const { submitRegistrationToPos } = await import("./server/provisioning");
+          const body = await request.json();
+          const idempKey = request.headers.get("x-idempotency-key") || undefined;
+          const { status, data } = await submitRegistrationToPos(body, idempKey);
+          return new Response(JSON.stringify(data), {
+            status,
+            headers: { "content-type": "application/json" },
+          });
+        } catch (err: any) {
+          return new Response(
+            JSON.stringify({
+              success: false,
+              error: "bad_request",
+              message: err?.message || "Invalid JSON payload",
+            }),
+            { status: 400, headers: { "content-type": "application/json" } }
+          );
+        }
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

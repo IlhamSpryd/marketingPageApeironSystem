@@ -15,9 +15,9 @@ export function initMarketing(): () => void {
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      GSAP + LENIS SETUP
-     ═══════════════════════════════════════════════════════════════ */
+      */
   gsap.registerPlugin(ScrollTrigger);
 
   const lenis = reduce ? null : new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 0.9 });
@@ -31,9 +31,9 @@ export function initMarketing(): () => void {
 
   const ctx = gsap.context(() => {
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        NAV
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const nav = $('#nav'), burger = $('#burger'), menu = $('#menu');
     if (burger && menu && nav) {
       burger.addEventListener('click', () => {
@@ -58,9 +58,9 @@ export function initMarketing(): () => void {
       }
     });
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        HERO CLOCK — Living state without fake data
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const hDate = document.getElementById('hero-date');
     const hTime = document.getElementById('hero-time');
     const bTime = document.getElementById('branch-time');
@@ -82,9 +82,9 @@ export function initMarketing(): () => void {
       const clockIv = setInterval(updateTime, 1000);
       ac.signal.addEventListener('abort', () => clearInterval(clockIv));
     }
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        HERO ENTRANCE — Cinematic First-Visit Experience
-       ═══════════════════════════════════════════════════════════════ */
+        */
     let isFirstVisit = true;
     try {
       isFirstVisit = !sessionStorage.getItem('apeiron_cinematic_played');
@@ -157,9 +157,9 @@ export function initMarketing(): () => void {
       gsap.set(inEls, { autoAlpha: 1 });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        HERO CHART — Bars grow as part of entrance
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const H = [2.1, 4.6, 5.4, 4.8, 6.3, 9.7, 8.2, 1.75], MAX = 9.7;
     const barsEl = $('#bars'), blabelsEl = $('#blabels');
     if (barsEl) {
@@ -185,9 +185,9 @@ export function initMarketing(): () => void {
       $$('#bars i').forEach((el: HTMLElement) => { el.style.height = `${el.dataset.h}%`; });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        HERO — Scroll-driven tilt & parallax floats (desktop only)
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const stage = $('#stage'), tilt = $('#tilt');
 
     if (!reduce && stage && tilt) {
@@ -233,11 +233,11 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        STORY — Pinned scroll-driven text focus (desktop)
        Each paragraph fades in and out as the user scrolls through,
        creating a reading-pace-controlled narrative.
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const storyP = $$('#storyList p');
     if (!reduce && storyP.length) {
       // Each paragraph gets its own scrubbed opacity timeline
@@ -259,9 +259,9 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        SECTION HEADS — Scroll-triggered stagger reveals
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       $$('.sec, .kds, .integrity').forEach((sec: HTMLElement) => {
         const head = sec.querySelector('.sec-head, .int-top');
@@ -286,9 +286,9 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        SYSTEM DIAGRAM — Scrubbed edge drawing
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const diag = $('.diagram');
     if (diag) {
       const edges = $$('.edge', diag);
@@ -311,9 +311,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        BRANCHES DIAGRAM — Scrubbed edge drawing
-       ═══════════════════════════════════════════════════════════════ */
+        */
     const brL = $('.br-l');
     if (brL) {
       const edges = $$('.edge', brL);
@@ -331,9 +331,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        INTEGRITY — Scrubbed pillar reveal
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       const pillars = $$('.pillar');
       if (pillars.length) {
@@ -355,9 +355,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        PHILOSOPHY — Scrubbed typography emphasis
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       const philH2 = $('.phil h2');
       const philSerif = $('.phil .serif');
@@ -392,9 +392,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        AUDIENCE — Rows slide in from alternating sides
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       $$('.aud-row').forEach((row: HTMLElement, i: number) => {
         const fromLeft = i % 2 === 0;
@@ -408,9 +408,9 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        STEPS — Sequential count-in
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       const steps = $$('.step');
       if (steps.length) {
@@ -422,9 +422,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        PLANS — Cards rise
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       const plans = $$('.plan');
       if (plans.length) {
@@ -436,9 +436,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        CTA — Entrance with scale
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       const ctaSection = $('.cta');
       if (ctaSection) {
@@ -451,9 +451,9 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* 
        FOOTER — Gentle fade
-       ═══════════════════════════════════════════════════════════════ */
+        */
     if (!reduce) {
       const footCols = $$('.foot > div');
       if (footCols.length) {
@@ -467,9 +467,9 @@ export function initMarketing(): () => void {
 
   }); // end gsap.context
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      POS DEMO — interactive (preserved from original)
-     ═══════════════════════════════════════════════════════════════ */
+      */
   const MENU: Record<string, [string, number][]> = {
     Coffee: [['Espresso', 25000], ['Americano', 28000], ['Cafe Latte', 35000], ['Cappuccino', 35000], ['Mocha', 42000], ['Flat White', 38000]],
     Pastry: [['Butter Croissant', 25000], ['Pain au Chocolat', 32000], ['Cinnamon Roll', 30000], ['Banana Bread', 22000]],
@@ -529,9 +529,9 @@ export function initMarketing(): () => void {
   }, { signal: ac.signal });
   renderMenu(); renderCart();
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      KDS DEMO — interactive (preserved)
-     ═══════════════════════════════════════════════════════════════ */
+      */
   const STAGES = ['New', 'Preparing', 'Ready', 'Completed'], ACT = ['Start preparing', 'Mark ready', 'Complete'];
   const nowMs = () => Date.now();
   const T = [
@@ -579,9 +579,9 @@ export function initMarketing(): () => void {
   }, 1000);
   renderKDS();
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      INVENTORY DEMO — interactive (preserved)
-     ═══════════════════════════════════════════════════════════════ */
+      */
   const stock: Record<string, { n: string; v: number; u: string; low: number }> = {
     beans: { n: 'Espresso beans (House Blend)', v: 4200, u: 'g', low: 1000 },
     milk: { n: 'Fresh milk', v: 9500, u: 'ml', low: 2000 },
@@ -635,9 +635,9 @@ export function initMarketing(): () => void {
   }, { signal: ac.signal });
   renderStock(); renderLedger();
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      BRANCH HQ TABS — interactive (preserved)
-     ═══════════════════════════════════════════════════════════════ */
+      */
   const B: Record<string, any> = {
     sales: {
       h: ['Branch', 'Transactions', 'Net sales', 'Share of today'],
@@ -683,10 +683,10 @@ export function initMarketing(): () => void {
   });
   showB('sales');
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      PARTICLE FIELD — Operational Intelligence Field
      Canvas 2D, cursor-reactive, scroll-aware, dark/light adaptive
-     ═══════════════════════════════════════════════════════════════ */
+      */
   function initParticles() {
     if (reduce) return () => { };
     const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
@@ -713,12 +713,6 @@ export function initMarketing(): () => void {
     let isVisible = true;
     let rafId = 0;
     let prevT = 0;
-
-    /* ── Color ── */
-    let isDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-    const mqDark = window.matchMedia('(prefers-color-scheme: dark)');
-    const onDarkChange = (e: MediaQueryListEvent) => { isDark = e.matches; };
-    mqDark.addEventListener('change', onDarkChange);
 
     /* ── Particle structure (flat arrays for cache perf) ── */
     let px: Float32Array, py: Float32Array;     // position
@@ -882,7 +876,7 @@ export function initMarketing(): () => void {
       // Connection lines (desktop only)
       if (CONN_DIST > 0) {
         const connSq = CONN_DIST * CONN_DIST;
-        const lineColor = isDark ? '255,255,255' : '0,0,0';
+        const lineColor = '255,255,255';
 
         c2d.lineWidth = 0.5;
         for (let i = 0; i < count; i++) {
@@ -904,10 +898,8 @@ export function initMarketing(): () => void {
         }
       }
 
-      // Particles
-      const colorsDark = ['255,255,255', '220,235,255', '255,230,200', '255,200,180'];
-      const colorsLight = ['0,0,0', '20,40,100', '100,70,20', '100,30,30'];
-      const palette = isDark ? colorsDark : colorsLight;
+      // Particles (dark mode palette)
+      const palette = ['255,255,255', '220,235,255', '255,230,200', '255,200,180'];
 
       for (let i = 0; i < count; i++) {
         // Edge fade
@@ -941,14 +933,13 @@ export function initMarketing(): () => void {
       hero.removeEventListener('pointermove', onPointerMove);
       hero.removeEventListener('pointerleave', onPointerLeave);
       visObs.disconnect();
-      mqDark.removeEventListener('change', onDarkChange);
     };
   }
   const cleanupParticles = initParticles();
 
-  /* ═══════════════════════════════════════════════════════════════
+  /* 
      CLEANUP
-     ═══════════════════════════════════════════════════════════════ */
+      */
   return () => {
     ac.abort();
     clearInterval(iv);

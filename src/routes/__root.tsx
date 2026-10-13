@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Apeiron POS" },
+      { title: "Apeiron System" },
       { name: "description", content: "Operating system for F&B businesses." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -105,11 +105,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" data-theme="dark">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="dark bg-[#141413] text-[#E9E8E3]">
         {children}
         <Scripts />
       </body>
