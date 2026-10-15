@@ -34,3 +34,9 @@ if (typeof window.IntersectionObserver === "undefined") {
   window.IntersectionObserver = MockObserver as unknown as typeof IntersectionObserver;
   globalThis.IntersectionObserver = MockObserver as unknown as typeof IntersectionObserver;
 }
+
+if (typeof HTMLCanvasElement !== "undefined") {
+  HTMLCanvasElement.prototype.getContext = function () {
+    return null;
+  } as unknown as typeof HTMLCanvasElement.prototype.getContext;
+}

@@ -98,11 +98,13 @@ body::before {
   width: 100vw;
   max-width: 1440px;
   height: 980px;
-  background: radial-gradient(ellipse 68% 50% at 50% 12%,
-      rgba(99, 102, 241, 0.12) 0%,
-      rgba(56, 189, 248, 0.07) 35%,
-      rgba(168, 85, 247, 0.03) 60%,
-      transparent 75%);
+  background: radial-gradient(
+    ellipse 68% 50% at 50% 12%,
+    rgba(99, 102, 241, 0.12) 0%,
+    rgba(56, 189, 248, 0.07) 35%,
+    rgba(168, 85, 247, 0.03) 60%,
+    transparent 75%
+  );
   pointer-events: none;
   z-index: 0;
   filter: blur(48px);
@@ -292,7 +294,6 @@ table {
 }
 
 @keyframes btnSweep {
-
   0%,
   75% {
     left: -60%;
@@ -880,13 +881,42 @@ body.mega-open footer {
   position: relative;
 }
 
-.hero-canvas {
+.apeiron-vortex-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-canvas,
+.apeiron-vortex-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
   pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* Atmospheric radial vignette framing the headline and stage without harsh edges */
+.apeiron-vortex-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 85% 65% at 50% 36%,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.48) 58%,
+    var(--bg) 95%
+  );
+  mask-image: radial-gradient(ellipse 95% 85% at 50% 45%, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 45%, black 40%, transparent 100%);
 }
 
 .hero-in {
@@ -922,7 +952,6 @@ body.mega-open footer {
 }
 
 @keyframes pulseDot {
-
   0%,
   100% {
     opacity: 1;
@@ -957,7 +986,6 @@ body.mega-open footer {
 }
 
 @keyframes celestialShimmer {
-
   0%,
   100% {
     background-position: 0% center;
@@ -1381,7 +1409,7 @@ body.mega-open footer {
   display: block;
 }
 
-.story p span+span {
+.story p span + span {
   margin-top: 0.35em;
 }
 
@@ -2151,7 +2179,7 @@ body.mega-open footer {
   fill: var(--muted-2);
 }
 
-.out~.n-t,
+.out ~ .n-t,
 .n-t.out {
   fill: var(--bg);
 }
@@ -2434,7 +2462,7 @@ body.mega-open footer {
   transition: transform var(--t-fast);
 }
 
-.pillar+.pillar {
+.pillar + .pillar {
   padding-left: 28px;
   border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -2521,7 +2549,7 @@ body.mega-open footer {
   display: block;
 }
 
-.aud-row p span+span {
+.aud-row p span + span {
   color: var(--muted-2);
 }
 
@@ -2536,7 +2564,7 @@ body.mega-open footer {
   padding: 32px 28px 0 0;
 }
 
-.step+.step {
+.step + .step {
   padding-left: 28px;
   border-left: 1px solid var(--border);
 }
@@ -2664,10 +2692,12 @@ body.mega-open footer {
   padding: clamp(120px, 18vw, 260px) 0;
   text-align: center;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 100%,
+    radial-gradient(
+      ellipse 70% 50% at 50% 100%,
       rgba(99, 102, 241, 0.16) 0%,
       rgba(56, 189, 248, 0.08) 45%,
-      #000000 90%),
+      #000000 90%
+    ),
     #000000;
   border-top: 1px solid var(--border);
   position: relative;
@@ -2792,7 +2822,6 @@ footer {
 }
 
 @media (max-width: 960px) {
-
   .links,
   .login {
     display: none;
@@ -2872,7 +2901,6 @@ footer {
 }
 
 @media (max-width: 760px) {
-
   .sec-head h2,
   .sec-head p {
     grid-column: 1 / -1;
@@ -2996,13 +3024,13 @@ footer {
   }
 
   .pillar,
-  .pillar+.pillar {
+  .pillar + .pillar {
     padding: 28px 0 0;
     border-left: 0;
     margin-top: 0;
   }
 
-  .pillar+.pillar {
+  .pillar + .pillar {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     margin-top: 28px;
   }
@@ -3016,7 +3044,7 @@ footer {
     grid-template-columns: 1fr 1fr;
   }
 
-  .foot>div:first-child {
+  .foot > div:first-child {
     grid-column: 1 / -1;
   }
 
@@ -3032,12 +3060,12 @@ footer {
   }
 
   .step,
-  .step+.step {
+  .step + .step {
     padding: 28px 0 0;
     border-left: 0;
   }
 
-  .step+.step {
+  .step + .step {
     border-top: 1px solid var(--border);
     margin-top: 28px;
   }
@@ -3076,8 +3104,9 @@ footer {
     display: none !important;
   }
 
-  .hero-canvas {
-    display: none !important;
+  .hero-canvas,
+  .apeiron-vortex-canvas {
+    opacity: 0.65 !important;
   }
 
   .h-line {

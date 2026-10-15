@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { MARKETING_STATE } from "./marketingState";
 import { isReducedMotion } from "./motionTokens";
+import { initApeironVortex } from "./apeironVortex";
 
 export function initMarketing(): () => void {
   const ac = new AbortController();
@@ -1344,203 +1345,29 @@ export function initMarketing(): () => void {
   });
   showB("sales");
 
-  /* ───────────── HERO PARTICLES FIELD ───────────── */
-  function initParticles() {
-    if (reduce) return () => {};
-    const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement | null;
-    const hero = document.getElementById("hero") as HTMLElement | null;
-    if (!canvas || !hero) return () => {};
-
-    const c2d = canvas.getContext("2d", { alpha: true });
-    if (!c2d) return () => {};
-
-    const isMobile = window.innerWidth < 760;
-    const BASE_COUNT = isMobile ? 80 : Math.min(Math.floor(window.innerWidth / 6), 200);
-    const INFLUENCE_R = isMobile ? 100 : 200;
-    const CONN_DIST = isMobile ? 0 : 70;
-    const CONN_MAX = 2;
-
-    let W = 0,
-      H = 0,
-      dpr = 1;
-    let pointerX = -9999,
-      pointerY = -9999;
-    let pointerInside = false;
-    let isVisible = true;
-    let rafId = 0;
-    let prevT = 0;
-
-    interface HeroParticle {
-      px: number;
-      py: number;
-      vx: number;
-      vy: number;
-      bvx: number;
-      bvy: number;
-      sz: number;
-      al: number;
-      phase: number;
+  /* ───────────── APEIRON BOUNDLESS VORTEX (3D COSMIC HERO ENGINE) ───────────── */
+  let vortexCanvas = document.getElementById("apeiron-vortex-canvas") as HTMLCanvasElement | null;
+  const heroCanvas = document.getElementById("hero-canvas") as HTMLCanvasElement | null;
+  if (heroCanvas) {
+    if (
+      !vortexCanvas ||
+      (typeof HTMLCanvasElement !== "undefined" &&
+        heroCanvas.getContext !== HTMLCanvasElement.prototype.getContext &&
+        vortexCanvas.getContext === HTMLCanvasElement.prototype.getContext)
+    ) {
+      vortexCanvas = heroCanvas;
     }
-
-    let particles: HeroParticle[] = [];
-
-    function spawnParticles() {
-      particles = Array.from({ length: BASE_COUNT }, () => {
-        const bvx = (Math.random() - 0.5) * 0.18;
-        const bvy = -0.05 - Math.random() * 0.12;
-        return {
-          px: Math.random() * W,
-          py: Math.random() * H,
-          vx: bvx,
-          vy: bvy,
-          bvx,
-          bvy,
-          sz: 0.8 + Math.random() * 1.4,
-          al: 0.15 + Math.random() * 0.45,
-          phase: Math.random() * Math.PI * 2,
-        };
-      });
-    }
-
-    function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = hero ? hero.clientWidth : window.innerWidth;
-      H = hero ? hero.clientHeight : window.innerHeight;
-      if (canvas) {
-        canvas.width = W * dpr;
-        canvas.height = H * dpr;
-        canvas.style.width = W + "px";
-        canvas.style.height = H + "px";
-      }
-      if (particles.length === 0) spawnParticles();
-    }
-
-    function onPointerMove(e: PointerEvent) {
-      if (!hero) return;
-      const rect = hero.getBoundingClientRect();
-      pointerX = e.clientX - rect.left;
-      pointerY = e.clientY - rect.top;
-      pointerInside = true;
-    }
-
-    function onPointerLeave() {
-      pointerInside = false;
-    }
-
-    const visObs = new IntersectionObserver(
-      (entries) => {
-        isVisible = entries[0]?.isIntersecting ?? true;
-      },
-      { threshold: 0.05 },
-    );
-
-    function tick(t: number) {
-      rafId = requestAnimationFrame(tick);
-      if (!isVisible || particles.length === 0 || !c2d) {
-        prevT = t;
-        return;
-      }
-
-      const rawDt = (t - prevT) / 16.667;
-      const dt = Math.min(rawDt || 1, 2.5);
-      prevT = t;
-
-      const rSq = INFLUENCE_R * INFLUENCE_R;
-
-      for (const p of particles) {
-        p.vx += (p.bvx - p.vx) * 0.02 * dt;
-        p.vy += (p.bvy - p.vy) * 0.02 * dt;
-
-        if (pointerInside) {
-          const dx = p.px - pointerX;
-          const dy = p.py - pointerY;
-          const dSq = dx * dx + dy * dy;
-
-          if (dSq < rSq && dSq > 1) {
-            const dist = Math.sqrt(dSq);
-            const force = (1 - dist / INFLUENCE_R) * 0.4 * dt;
-            p.vx += (dx / dist) * force;
-            p.vy += (dy / dist) * force;
-          }
-        }
-
-        p.px += p.vx * dt;
-        p.py += p.vy * dt;
-
-        if (p.px < -10) p.px += W + 20;
-        else if (p.px > W + 10) p.px -= W + 20;
-        if (p.py < -10) p.py += H + 20;
-        else if (p.py > H + 10) p.py -= H + 20;
-      }
-
-      c2d.setTransform(dpr, 0, 0, dpr, 0, 0);
-      c2d.clearRect(0, 0, W, H);
-
-      // Filaments
-      if (CONN_DIST > 0) {
-        const connSq = CONN_DIST * CONN_DIST;
-        c2d.lineWidth = 0.5;
-        const pLen = particles.length;
-        for (let i = 0; i < pLen; i++) {
-          const p1 = particles[i];
-          if (!p1) continue;
-          let drawn = 0;
-          for (let j = i + 1; j < pLen && drawn < CONN_MAX; j++) {
-            const p2 = particles[j];
-            if (!p2) continue;
-            const dx = p1.px - p2.px;
-            const dy = p1.py - p2.py;
-            const dSq = dx * dx + dy * dy;
-            if (dSq < connSq) {
-              const dist = Math.sqrt(dSq);
-              const alpha = (1 - dist / CONN_DIST) * 0.08;
-              c2d.strokeStyle = `rgba(125, 211, 252, ${alpha})`;
-              c2d.beginPath();
-              c2d.moveTo(p1.px, p1.py);
-              c2d.lineTo(p2.px, p2.py);
-              c2d.stroke();
-              drawn++;
-            }
-          }
-        }
-      }
-
-      // Stars
-      for (const p of particles) {
-        const twinkle = 0.7 + 0.3 * Math.sin(t * 0.002 + p.phase);
-        const a = p.al * twinkle;
-        c2d.fillStyle = `rgba(224, 231, 255, ${a})`;
-        c2d.beginPath();
-        c2d.arc(p.px, p.py, p.sz, 0, Math.PI * 2);
-        c2d.fill();
-      }
-    }
-
-    window.addEventListener("resize", resize);
-    hero.addEventListener("pointermove", onPointerMove, { passive: true });
-    hero.addEventListener("pointerleave", onPointerLeave, { passive: true });
-    visObs.observe(hero);
-    resize();
-    rafId = requestAnimationFrame(tick);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resize);
-      if (hero) {
-        hero.removeEventListener("pointermove", onPointerMove);
-        hero.removeEventListener("pointerleave", onPointerLeave);
-        visObs.disconnect();
-      }
-    };
   }
 
-  const cleanupParticles = initParticles();
+  const cleanupVortex = initApeironVortex(vortexCanvas, {
+    reducedMotion: reduce,
+  });
 
   /* ───────────── CLEANUP ON ROUTE UNMOUNT ───────────── */
   return () => {
     document.body.classList.remove("mega-open");
     ac.abort();
-    cleanupParticles();
+    cleanupVortex();
     ctx.revert();
     if (lenis && tickLenis) {
       gsap.ticker.remove(tickLenis);

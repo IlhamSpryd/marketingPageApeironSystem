@@ -243,7 +243,11 @@ export const markup = `
 <main id="top">
 <!-- ───────────── HERO ───────────── -->
 <header class="hero" id="hero">
-  <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
+  <div class="apeiron-vortex-wrap" id="apeiron-vortex-wrap" aria-hidden="true">
+    <canvas id="apeiron-vortex-canvas" class="hero-canvas apeiron-vortex-canvas" aria-hidden="true"></canvas>
+    <canvas id="hero-canvas" class="hero-canvas hero-canvas-fallback" aria-hidden="true" style="display:none"></canvas>
+    <div class="apeiron-vortex-vignette" aria-hidden="true"></div>
+  </div>
   <div class="wrap hero-in">
     <h1 class="h-xl" data-in style="--d:120ms">
       <span class="h-mask"><span class="h-line">Run every branch</span></span><br>
