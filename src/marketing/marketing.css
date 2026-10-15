@@ -972,17 +972,18 @@ body.mega-open footer {
 
 .h-line {
   display: inline-block;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
 }
 
 .hero h1 .serif {
-  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 35%, #93c5fd 65%, #ffffff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #d2e4ff 30%, #9bbcff 65%, #ffffff 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
-  animation: celestialShimmer 6s ease-in-out infinite;
+  text-shadow: 0 0 32px rgba(155, 188, 255, 0.28);
+  animation: celestialShimmer 7s ease-in-out infinite;
 }
 
 @keyframes celestialShimmer {

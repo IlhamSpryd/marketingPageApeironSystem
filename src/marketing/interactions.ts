@@ -49,12 +49,12 @@ export function initMarketing(): () => void {
     const megaPanels = megaMenu ? $$(".mega-panel", megaMenu) : [];
     let closeMegaTimer: ReturnType<typeof setTimeout> | null = null;
 
-    // Refined Nav Initial Entrance
+    // Refined Nav Initial Entrance (0.15s)
     if (nav && !reduce) {
       gsap.fromTo(
         nav,
-        { y: -16, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, ease: "power3.out", delay: 0.1 },
+        { y: -8, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, ease: "power4.out", delay: 0.15 },
       );
     }
 
@@ -280,8 +280,8 @@ export function initMarketing(): () => void {
       ).join("");
     }
 
-    /* ───────────── HERO CINEMATIC ENTRANCE ───────────── */
-    const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    /* ───────────── HERO CINEMATIC ENTRANCE (OPENAI ASTRA CHOREOGRAPHY) ───────────── */
+    const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
     const eyebrow = $(".hero .eyebrow");
     const headline = $(".hero h1.h-xl");
@@ -298,20 +298,25 @@ export function initMarketing(): () => void {
     const appMain = $(".app-main");
 
     if (!reduce && headline) {
-      // 1. Initial pristine state
-      if (eyebrow) gsap.set(eyebrow, { autoAlpha: 0, y: -16, scale: 0.95 });
-      if (headlineLines.length) {
-        gsap.set(headlineLines, { y: "110%", opacity: 0 });
+      // 1. Initial pristine state (optical blur-to-crisp setup)
+      const line1 = headlineLines[0];
+      const line2 = headlineLines[1];
+      if (eyebrow) gsap.set(eyebrow, { autoAlpha: 0, y: -12, scale: 0.98 });
+      if (line1 && line2) {
+        gsap.set(line1, { y: 18, opacity: 0, filter: "blur(12px)" });
+        gsap.set(line2, { y: 18, opacity: 0, filter: "blur(12px)" });
+      } else if (line1) {
+        gsap.set(line1, { y: 18, opacity: 0, filter: "blur(12px)" });
       } else {
-        gsap.set(headline, { autoAlpha: 0, y: 40 });
+        gsap.set(headline, { autoAlpha: 0, y: 24, filter: "blur(12px)" });
       }
-      if (lead) gsap.set(lead, { autoAlpha: 0, y: 24 });
-      if (btnRow) gsap.set(btnRow, { autoAlpha: 0, y: 18, scale: 0.96 });
+      if (lead) gsap.set(lead, { autoAlpha: 0, y: 14 });
+      if (btnRow) gsap.set(btnRow, { autoAlpha: 0, y: 14, scale: 0.98 });
       if (stage) gsap.set(stage, { autoAlpha: 0 });
-      if (tilt) gsap.set(tilt, { y: 65, rotateX: 14, scale: 0.9, filter: "blur(6px)" });
-      if (appMain) gsap.set(appMain, { autoAlpha: 0, scale: 0.98 });
-      if (fPos) gsap.set(fPos, { autoAlpha: 0, x: -40, y: 20, scale: 0.94 });
-      if (fAlert) gsap.set(fAlert, { autoAlpha: 0, x: 35, y: -16, scale: 0.94 });
+      if (tilt) gsap.set(tilt, { y: 28, rotateX: 10, scale: 0.985 });
+      if (appMain) gsap.set(appMain, { autoAlpha: 0, scale: 0.99 });
+      if (fPos) gsap.set(fPos, { autoAlpha: 0, x: -30, y: 16, scale: 0.96 });
+      if (fAlert) gsap.set(fAlert, { autoAlpha: 0, x: 26, y: -14, scale: 0.96 });
       if (r1044) gsap.set(r1044, { opacity: 0, y: 8 });
       gsap.set("#bars i", { height: "0%" });
 
@@ -320,100 +325,102 @@ export function initMarketing(): () => void {
       if (kpiSales) kpiSales.textContent = "Rp 0.00M";
       if (kpiTx) kpiTx.textContent = "0";
 
-      // 2. Coordinated Sequence
+      // 2. Coordinated Sequence with precise absolute timings
       if (eyebrow) {
         heroTl.to(
           eyebrow,
-          { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" },
-          "+=0.08",
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.75, ease: "power4.out" },
+          0.2,
         );
       }
 
-      if (headlineLines.length) {
+      // 0.35s: Line 1 "Run every branch" reveals from soft optical blur (1.1s duration)
+      if (line1) {
         heroTl.to(
-          headlineLines,
+          line1,
           {
-            y: "0%",
+            y: 0,
             opacity: 1,
+            filter: "blur(0px)",
             duration: 1.1,
-            stagger: 0.12,
             ease: "power4.out",
           },
-          eyebrow ? "-=0.45" : "+=0.08",
+          0.35,
         );
-      } else {
+      }
+
+      // 0.55s: Line 2 "with clarity." reveals from blur-to-crisp, synchronized with vortex core lock
+      if (line2) {
+        heroTl.to(
+          line2,
+          {
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 1.1,
+            ease: "power4.out",
+          },
+          0.55,
+        );
+      } else if (!headlineLines.length && headline) {
         heroTl.to(
           headline,
           {
             autoAlpha: 1,
             y: 0,
-            duration: 1.05,
+            filter: "blur(0px)",
+            duration: 1.1,
             ease: "power4.out",
           },
-          eyebrow ? "-=0.45" : "+=0.08",
+          0.35,
         );
       }
 
+      // 0.80s: Subtitle lead paragraph and CTA buttons
       if (lead) {
-        heroTl.to(
-          lead,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.85,
-            ease: "power3.out",
-          },
-          "-=0.75",
-        );
+        heroTl.to(lead, { autoAlpha: 1, y: 0, duration: 0.9, ease: "power4.out" }, 0.8);
       }
-
       if (btnRow) {
         heroTl.to(
           btnRow,
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.8,
-            ease: "back.out(1.25)",
-          },
-          "-=0.6",
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: "power4.out" },
+          0.85,
         );
       }
 
-      // Grand 3D Stage Landing
+      // 1.05s: 3D Dashboard Stage rises from depth
       if (stage && tilt) {
-        heroTl.to(stage, { autoAlpha: 1, duration: 0.4 }, "-=0.5").to(
+        heroTl.to(stage, { autoAlpha: 1, duration: 0.4 }, 1.0);
+        heroTl.to(
           tilt,
           {
             y: 0,
             rotateX: 6,
             scale: 0.96,
-            filter: "blur(0px)",
-            duration: 1.35,
-            ease: "power3.out",
+            duration: 1.2,
+            ease: "power4.out",
           },
-          "<",
+          1.05,
         );
       }
 
       if (appMain) {
-        heroTl.to(appMain, { autoAlpha: 1, scale: 1, duration: 0.8 }, "-=0.8");
+        heroTl.to(appMain, { autoAlpha: 1, scale: 1, duration: 0.8, ease: "power3.out" }, 1.25);
       }
 
       // Floating widgets arrival
       if (fPos) {
         heroTl.to(
           fPos,
-          { autoAlpha: 1, x: 0, y: 0, scale: 1, duration: 0.85, ease: "back.out(1.2)" },
-          "-=0.6",
+          { autoAlpha: 1, x: 0, y: 0, scale: 1, duration: 0.85, ease: "back.out(1.15)" },
+          1.35,
         );
       }
       if (fAlert) {
         heroTl.to(
           fAlert,
-          { autoAlpha: 1, x: 0, y: 0, scale: 1, duration: 0.85, ease: "back.out(1.2)" },
-          "-=0.7",
+          { autoAlpha: 1, x: 0, y: 0, scale: 1, duration: 0.85, ease: "back.out(1.15)" },
+          1.45,
         );
       }
 
@@ -426,7 +433,7 @@ export function initMarketing(): () => void {
           stagger: 0.035,
           ease: "power2.out",
         },
-        "-=0.65",
+        1.55,
       );
 
       // Transaction ripple and KPI rollup
