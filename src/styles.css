@@ -155,3 +155,35 @@
     color: var(--color-foreground);
   }
 }
+
+/* Crisp, restrained input transitions */
+.field-input {
+  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+.field-input:hover:not(:disabled):not([readonly]) {
+  border-color: #A1A1AA;
+}
+.field-input:focus {
+  outline: none;
+  border-color: #09090B;
+  box-shadow: 0 0 0 1px #09090B;
+}
+
+/* Subtle editorial lighting for right brand panel */
+.editorial-surface {
+  background-color: #0A0A0B;
+  background-image: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.04) 0%, transparent 55%);
+}
+
+/* Guaranteed Obsidian Black CTA Button */
+.btn-primary-black {
+  background-color: #141413 !important;
+  color: #FFFFFF !important;
+}
+.btn-primary-black:hover:not(:disabled) {
+  background-color: #27272a !important;
+}
+.btn-primary-black:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}

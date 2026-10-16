@@ -21,7 +21,7 @@ export function initMarketing(): () => void {
 
   const reduce = isReducedMotion();
 
-  /* ───────────── GSAP & LENIS SETUP ───────────── */
+  /* GSAP & LENIS SETUP */
   gsap.registerPlugin(ScrollTrigger);
 
   const lenis =
@@ -39,7 +39,7 @@ export function initMarketing(): () => void {
   }
 
   const ctx = gsap.context(() => {
-    /* ───────────── NAV & FULL-WIDTH MEGA MENU ───────────── */
+    /* NAV & FULL-WIDTH MEGA MENU */
     const nav = $(".nav");
     const burger = $("#burger");
     const menu = $("#menu");
@@ -228,7 +228,7 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ───────────── HERO LIVING CLOCK ───────────── */
+    /* HERO LIVING CLOCK */
     const hDate = document.getElementById("hero-date");
     const hTime = document.getElementById("hero-time");
     const bTime = document.getElementById("branch-time");
@@ -260,7 +260,7 @@ export function initMarketing(): () => void {
       ac.signal.addEventListener("abort", () => clearInterval(clockIv));
     }
 
-    /* ───────────── HERO CHART BARS INITIALIZATION ───────────── */
+    /* HERO CHART BARS INITIALIZATION */
     const H = [2.1, 4.6, 5.4, 4.8, 6.3, 9.7, 8.2, 1.75];
     const MAX = 9.7;
     const barsEl = $("#bars");
@@ -280,7 +280,7 @@ export function initMarketing(): () => void {
       ).join("");
     }
 
-    /* ───────────── HERO CINEMATIC ENTRANCE (OPENAI ASTRA CHOREOGRAPHY) ───────────── */
+    /* HERO CINEMATIC ENTRANCE (OPENAI ASTRA CHOREOGRAPHY) */
     const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
     const eyebrow = $(".hero .eyebrow");
@@ -505,7 +505,7 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ───────────── HERO DESKTOP MOUSE PARALLAX TILT ───────────── */
+    /* HERO DESKTOP MOUSE PARALLAX TILT */
     if (!reduce && stage && tilt && window.innerWidth > 960) {
       let targetRotX = 6;
       let targetRotY = 0;
@@ -564,7 +564,7 @@ export function initMarketing(): () => void {
       );
     }
 
-    /* ───────────── STORY — READING-PACED NARRATIVE ───────────── */
+    /* STORY — READING-PACED NARRATIVE */
     const storyP = $$("#storyList p");
     if (!reduce && storyP.length) {
       storyP.forEach((p, i) => {
@@ -585,7 +585,7 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ───────────── SECTION HEADS — STAGGER REVEAL ───────────── */
+    /* SECTION HEADS — STAGGER REVEAL */
     if (!reduce) {
       $$(".sec, .kds, .integrity").forEach((sec) => {
         const head = sec.querySelector(".sec-head, .int-top");
@@ -619,7 +619,7 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ───────────── SYSTEM DIAGRAM — PIPELINE DRAWING ───────────── */
+    /* SYSTEM DIAGRAM — PIPELINE DRAWING */
     const diag = $(".diagram");
     if (diag) {
       const edges = $$(".edge", diag);
@@ -659,7 +659,7 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ───────────── BRANCHES DIAGRAM ───────────── */
+    /* BRANCHES DIAGRAM */
     const brL = $(".br-l");
     if (brL) {
       const edges = $$(".edge", brL);
@@ -692,7 +692,7 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ───────────── INTEGRITY PILLARS & AUDIT LOG ───────────── */
+    /* INTEGRITY PILLARS & AUDIT LOG */
     if (!reduce) {
       const pillars = $$(".pillar");
       if (pillars.length) {
@@ -721,7 +721,7 @@ export function initMarketing(): () => void {
       }
     }
 
-    /* ───────────── PHILOSOPHY & AUDIENCE ───────────── */
+    /* PHILOSOPHY & AUDIENCE */
     if (!reduce) {
       const philH2 = $(".phil h2");
       const philLead = $(".phil .lead");
@@ -769,7 +769,7 @@ export function initMarketing(): () => void {
       });
     }
 
-    /* ───────────── STEPS, PLANS & CTA ───────────── */
+    /* STEPS, PLANS & CTA */
     if (!reduce) {
       const steps = $$(".step");
       if (steps.length) {
@@ -827,7 +827,7 @@ export function initMarketing(): () => void {
     }
   }); // end gsap.context
 
-  /* ───────────── POS INTERACTIVE DEMO ───────────── */
+  /* POS INTERACTIVE DEMO */
   const MENU: Record<string, [string, number][]> = {
     Coffee: [
       ["Espresso", 25000],
@@ -989,7 +989,7 @@ export function initMarketing(): () => void {
   renderMenu();
   renderCart();
 
-  /* ───────────── KDS INTERACTIVE DEMO ───────────── */
+  /* KDS INTERACTIVE DEMO */
   const STAGES = ["New", "Preparing", "Ready", "Completed"];
   const ACT = ["Start preparing", "Mark ready", "Complete"];
   const nowMs = () => Date.now();
@@ -1132,7 +1132,7 @@ export function initMarketing(): () => void {
   ac.signal.addEventListener("abort", () => clearInterval(kdsIv));
   renderKDS();
 
-  /* ───────────── INVENTORY & RECIPES DEMO ───────────── */
+  /* INVENTORY & RECIPES DEMO */
   interface StockItem {
     n: string;
     v: number;
@@ -1249,7 +1249,7 @@ export function initMarketing(): () => void {
   renderStock();
   renderLedger();
 
-  /* ───────────── MULTI-BRANCH HQ TABS DEMO ───────────── */
+  /* MULTI-BRANCH HQ TABS DEMO */
   interface BranchTabData {
     h: string[];
     rows: (string | number)[][];
@@ -1352,7 +1352,7 @@ export function initMarketing(): () => void {
   });
   showB("sales");
 
-  /* ───────────── APEIRON BOUNDLESS VORTEX (3D COSMIC HERO ENGINE) ───────────── */
+  /* APEIRON BOUNDLESS VORTEX (3D COSMIC HERO ENGINE) */
   let vortexCanvas = document.getElementById("apeiron-vortex-canvas") as HTMLCanvasElement | null;
   const heroCanvas = document.getElementById("hero-canvas") as HTMLCanvasElement | null;
   if (heroCanvas) {
@@ -1370,7 +1370,7 @@ export function initMarketing(): () => void {
     reducedMotion: reduce,
   });
 
-  /* ───────────── CLEANUP ON ROUTE UNMOUNT ───────────── */
+  /* CLEANUP ON ROUTE UNMOUNT */
   return () => {
     document.body.classList.remove("mega-open");
     ac.abort();

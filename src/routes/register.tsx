@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import logoUrl from "@/assets/logo.png";
 import { RegistrationForm } from "@/components/RegistrationForm";
-import { ArrowLeft, ExternalLink, ShieldCheck, Zap, HelpCircle } from "lucide-react";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
@@ -12,14 +11,6 @@ export const Route = createFileRoute("/register")({
         content:
           "Daftarkan bisnis F&B Anda di Apeiron POS. Platform operasional terpadu untuk kasir, dapur, inventaris, dan multi-cabang.",
       },
-      { property: "og:title", content: "Daftar Akun Bisnis — Apeiron POS" },
-      {
-        property: "og:description",
-        content:
-          "Daftarkan bisnis F&B Anda di Apeiron POS. Platform operasional terpadu untuk kasir, dapur, inventaris, dan multi-cabang.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: RegisterPage,
@@ -31,131 +22,104 @@ function RegisterPage() {
     "http://localhost:8000/login";
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#F7F7F5] text-[#37352F] font-sans antialiased selection:bg-[#37352F] selection:text-white">
-      {/* ────────────────────────────────────────────────────────────
-          HEADER: CLEAN, MINIMALIST TOP BAR
-          ──────────────────────────────────────────────────────────── */}
-      <header className="w-full border-b border-[#E9E9E7]/80 bg-[#F7F7F5]/90 backdrop-blur-md sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-          <Link
-            to="/"
-            className="flex items-center gap-3 transition-opacity hover:opacity-85 group"
-            aria-label="Kembali ke Beranda Apeiron"
-          >
-            <img
-              src={logoUrl}
-              alt="Apeiron System Logo"
-              className="h-9 sm:h-10 w-auto object-contain"
-            />
-            <div className="flex flex-col">
-              <span className="font-brand font-bold text-base sm:text-lg tracking-tight text-[#37352F] leading-tight">
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full bg-white overflow-x-hidden font-sans antialiased text-zinc-950 selection:bg-zinc-900 selection:text-white">
+      {/* KIRI: KONTEN FORM REGISTRASI */}
+      <div className="md:col-span-1 lg:col-span-7 flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 w-full relative bg-white min-h-screen">
+        <div>
+          {/* Brand Wordmark & Logo */}
+          <div className="mb-6 sm:mb-8 w-full max-w-sm mx-auto md:mx-0" style={{ maxWidth: 384 }}>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2.5 select-none transition-opacity hover:opacity-85"
+            >
+              <img
+                src={logoUrl}
+                alt="Apeiron System Logo"
+                className="h-9 sm:h-10 w-auto object-contain"
+              />
+              <span className="text-base sm:text-lg font-bold tracking-tight text-zinc-950 font-brand">
                 Apeiron System
               </span>
-              <span className="text-[10px] uppercase tracking-wider font-semibold text-[#787774]">
-                Point of Sales
-              </span>
-            </div>
-          </Link>
+            </Link>
+          </div>
+        </div>
 
-          <div className="flex items-center gap-3 text-xs sm:text-sm">
-            <span className="hidden sm:inline text-[#787774]">Sudah punya akun?</span>
-            <a
-              href={posLoginUrl}
-              className="inline-flex items-center gap-1.5 font-medium px-4 py-2 rounded-xl border border-[#E9E9E7] bg-white text-[#37352F] hover:bg-[#F1F1EF] hover:border-[#D8D8D5] text-xs sm:text-sm transition-all duration-200 shadow-2xs active:scale-[0.98]"
-            >
-              <span>Masuk POS</span>
-              <span>→</span>
+        {/* Form Mount strictly clamped to max-w-sm / 384px */}
+        <div className="my-auto py-4 sm:py-6 w-full max-w-sm mx-auto" style={{ maxWidth: 384 }}>
+          <RegistrationForm posLoginUrl={posLoginUrl} />
+        </div>
+
+        {/* Footer Bar */}
+        <div
+          className="w-full max-w-sm mx-auto md:max-w-none flex items-center justify-between text-xs text-zinc-400 pt-8 mt-auto border-t border-zinc-100"
+          style={{ maxWidth: 384 }}
+        >
+          <span>© {new Date().getFullYear()} Apeiron Systems</span>
+          <div className="flex items-center gap-4">
+            <Link to="/" className="hover:text-zinc-600 transition-colors">
+              Beranda
+            </Link>
+            <a href="#privacy" onClick={(e) => e.preventDefault()} className="hover:text-zinc-600 transition-colors">
+              Privacy
+            </a>
+            <a href="#terms" onClick={(e) => e.preventDefault()} className="hover:text-zinc-600 transition-colors">
+              Terms
             </a>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* ────────────────────────────────────────────────────────────
-          MAIN: FOCUSED, SEAMLESS ONBOARDING WORKSPACE
-          ──────────────────────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-10 sm:py-16">
-        <div className="w-full max-w-lg mx-auto">
-          {/* Back link & progress indicator */}
-          <div className="mb-6 flex items-center justify-between">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#787774] hover:text-[#37352F] transition group"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
-              <span>Kembali ke Beranda</span>
-            </Link>
+      {/* KANAN: EDITORIAL BRAND PANEL */}
+      <div
+        className="hidden md:flex md:col-span-1 lg:col-span-5 editorial-surface text-white p-8 sm:p-10 lg:p-12 xl:p-14 flex-col justify-between select-none relative overflow-hidden bg-[#0A0A0B] min-h-screen"
+        aria-hidden="true"
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity pointer-events-none"
+          style={{ backgroundImage: "url('/assets/images/auth/panelKananLogin.avif')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/60 to-transparent pointer-events-none" />
 
-            <span className="text-xs font-medium text-[#9B9A97]">
-              Langkah 1 dari 2
-            </span>
-          </div>
+        <div className="relative z-10 text-xs text-zinc-400 font-medium tracking-wide">
+          Pengaturan Workspace
+        </div>
 
-          {/* Heading block */}
-          <div className="mb-8 text-center sm:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-white text-[#55544E] border border-[#E9E9E7] mb-3 shadow-2xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span>14 Hari Uji Coba Gratis · Tanpa Kartu Kredit</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#37352F]">
-              Daftarkan <span className="font-brand italic font-normal">Bisnis Anda</span>
-            </h1>
-            <p className="mt-2 text-sm text-[#787774] leading-relaxed">
-              Mulai ruang kerja Apeiron POS. Akun pemilik (Owner) dan tenant workspace akan langsung disiapkan secara otomatis.
+        <div className="relative z-10 my-auto max-w-xs space-y-8">
+          <div className="space-y-2">
+            <p className="text-lg font-normal tracking-tight text-zinc-100 leading-snug">
+              Point of sale, ledger inventaris, dan rekonsiliasi kasir untuk bisnis F&amp;B modern.
             </p>
           </div>
 
-          {/* Main Form Card */}
-          <div className="rounded-2xl border border-[#E9E9E7] bg-white p-6 sm:p-9 shadow-[0_1px_3px_rgba(0,0,0,0.03),0_8px_24px_rgba(0,0,0,0.02)]">
-            <RegistrationForm />
-          </div>
+          <div className="space-y-6 border-l border-zinc-800 pl-5">
+            <div>
+              <div className="text-xs text-white font-medium">1. Pendaftaran Bisnis</div>
+              <div className="text-xs text-zinc-400 mt-0.5">
+                Daftarkan nama usaha dan identitas pemilik untuk menginisialisasi tenant.
+              </div>
+            </div>
 
-          {/* Reassurance Micro-Strip */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center sm:text-left text-xs text-[#787774]">
-            <div className="flex items-center sm:items-start gap-2.5 justify-center sm:justify-start p-2">
-              <ShieldCheck className="w-4 h-4 text-[#55544E] shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-[#37352F]">Aman &amp; Terisolasi</p>
-                <p className="text-[11px] text-[#9B9A97]">Data terenkripsi per tenant</p>
+            <div>
+              <div className="text-xs text-zinc-500">2. Aktivasi &amp; Kata Sandi</div>
+              <div className="text-xs text-zinc-500 mt-0.5">
+                Verifikasi akun dan tentukan kata sandi master owner melalui tautan email.
               </div>
             </div>
-            <div className="flex items-center sm:items-start gap-2.5 justify-center sm:justify-start p-2">
-              <Zap className="w-4 h-4 text-[#55544E] shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-[#37352F]">Aktivasi Cepat</p>
-                <p className="text-[11px] text-[#9B9A97]">Siap pakai dalam 2 menit</p>
-              </div>
-            </div>
-            <div className="flex items-center sm:items-start gap-2.5 justify-center sm:justify-start p-2">
-              <HelpCircle className="w-4 h-4 text-[#55544E] shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-[#37352F]">Dukungan Penuh</p>
-                <p className="text-[11px] text-[#9B9A97]">Panduan setup &amp; migrasi</p>
+
+            <div>
+              <div className="text-xs text-zinc-500">3. Cabang &amp; Operasional</div>
+              <div className="text-xs text-zinc-500 mt-0.5">
+                Konfigurasi gerai pertama, meja, produk, dan mulai mencatat penjualan.
               </div>
             </div>
           </div>
         </div>
-      </main>
 
-      {/* ────────────────────────────────────────────────────────────
-          FOOTER: MINIMALIST & PROFESSIONAL
-          ──────────────────────────────────────────────────────────── */}
-      <footer className="w-full border-t border-[#E9E9E7]/80 bg-[#F7F7F5] py-6 sm:py-8">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#787774]">
-          <p>© 2026 Apeiron System. Operating System for F&amp;B businesses.</p>
-          <div className="flex items-center gap-5">
-            <Link to="/" className="hover:text-[#37352F] transition">
-              Beranda
-            </Link>
-            <a
-              href={posLoginUrl}
-              className="hover:text-[#37352F] transition inline-flex items-center gap-1"
-            >
-              <span>Login POS</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
+        <div className="relative z-10 flex items-center justify-between text-xs text-zinc-400 pt-6 border-t border-zinc-900">
+          <span>Enterprise Point of Sale</span>
+          <span>© {new Date().getFullYear()}</span>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
