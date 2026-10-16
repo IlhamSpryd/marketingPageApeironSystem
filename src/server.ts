@@ -71,6 +71,37 @@ export default {
         }
       }
 
+      if (url.pathname === "/api/chat") {
+        if (request.method === "GET") {
+          return new Response(JSON.stringify({ status: "ok", service: "Apeiron AI API" }), {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          });
+        }
+
+        if (request.method === "POST") {
+          try {
+            const { handleGeminiChat } = await import("./server/geminiChat");
+            const body = await request.json();
+            const { status, data } = await handleGeminiChat(body);
+            return new Response(JSON.stringify(data), {
+              status,
+              headers: { "content-type": "application/json" },
+            });
+          } catch (err: unknown) {
+            const message =
+              err instanceof Error ? err.message : "Invalid JSON payload or chat error";
+            return new Response(
+              JSON.stringify({
+                success: false,
+                error: message,
+              }),
+              { status: 400, headers: { "content-type": "application/json" } },
+            );
+          }
+        }
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

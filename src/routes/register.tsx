@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import logoUrl from "@/assets/logo.png";
 import { RegistrationForm } from "@/components/RegistrationForm";
 
 export const Route = createFileRoute("/register")({
@@ -16,7 +15,7 @@ export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
-function RegisterPage() {
+export function RegisterPage() {
   const posLoginUrl =
     (typeof process !== "undefined" && process.env?.["VITE_APEIRON_POS_LOGIN_URL"]) ||
     "http://localhost:8000/login";
@@ -25,25 +24,6 @@ function RegisterPage() {
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full bg-white overflow-x-hidden font-sans antialiased text-zinc-950 selection:bg-zinc-900 selection:text-white">
       {/* KIRI: KONTEN FORM REGISTRASI */}
       <div className="md:col-span-1 lg:col-span-7 flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 w-full relative bg-white min-h-screen">
-        <div>
-          {/* Brand Wordmark & Logo */}
-          <div className="mb-6 sm:mb-8 w-full max-w-sm mx-auto md:mx-0" style={{ maxWidth: 384 }}>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2.5 select-none transition-opacity hover:opacity-85"
-            >
-              <img
-                src={logoUrl}
-                alt="Apeiron System Logo"
-                className="h-9 sm:h-10 w-auto object-contain"
-              />
-              <span className="text-base sm:text-lg font-bold tracking-tight text-zinc-950 font-brand">
-                Apeiron System
-              </span>
-            </Link>
-          </div>
-        </div>
-
         {/* Form Mount strictly clamped to max-w-sm / 384px */}
         <div className="my-auto py-4 sm:py-6 w-full max-w-sm mx-auto" style={{ maxWidth: 384 }}>
           <RegistrationForm posLoginUrl={posLoginUrl} />
@@ -59,10 +39,18 @@ function RegisterPage() {
             <Link to="/" className="hover:text-zinc-600 transition-colors">
               Beranda
             </Link>
-            <a href="#privacy" onClick={(e) => e.preventDefault()} className="hover:text-zinc-600 transition-colors">
+            <a
+              href="#privacy"
+              onClick={(e) => e.preventDefault()}
+              className="hover:text-zinc-600 transition-colors"
+            >
               Privacy
             </a>
-            <a href="#terms" onClick={(e) => e.preventDefault()} className="hover:text-zinc-600 transition-colors">
+            <a
+              href="#terms"
+              onClick={(e) => e.preventDefault()}
+              className="hover:text-zinc-600 transition-colors"
+            >
               Terms
             </a>
           </div>

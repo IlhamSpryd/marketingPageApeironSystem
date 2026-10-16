@@ -13,7 +13,9 @@ interface RegistrationFormProps {
   posLoginUrl?: string;
 }
 
-export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }: RegistrationFormProps) {
+export function RegistrationForm({
+  posLoginUrl = "http://localhost:8000/login",
+}: RegistrationFormProps) {
   const [formData, setFormData] = useState<FormState>({
     tenant_name: "",
     owner_name: "",
@@ -112,9 +114,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
             <h2 className="text-xl font-medium tracking-tight text-zinc-950">
               Registrasi Berhasil
             </h2>
-            <p className="text-xs text-zinc-500">
-              Workspace telah diinisialisasi di sistem.
-            </p>
+            <p className="text-xs text-zinc-500">Workspace telah diinisialisasi di sistem.</p>
           </div>
         </div>
 
@@ -134,7 +134,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
           </div>
           <div className="py-2.5 flex justify-between items-center">
             <span className="text-zinc-500">Tenant ID</span>
-            <span className="font-mono text-zinc-700">#{successResult.tenant_id}</span>
+            <span className="font-sans font-medium text-zinc-700">#{successResult.tenant_id}</span>
           </div>
         </div>
 
@@ -147,7 +147,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
             </p>
             <a
               href={successResult.onboarding.activation_url}
-              style={{ backgroundColor: '#141413', color: '#ffffff' }}
+              style={{ backgroundColor: "#141413", color: "#ffffff" }}
               className="btn-primary-black inline-flex w-full items-center justify-center gap-2 rounded-md font-medium px-4 h-10 text-xs transition active:scale-[0.98]"
             >
               Aktifkan Akun &amp; Buat Sandi ➜
@@ -158,7 +158,10 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
             <p className="font-medium text-zinc-900">Periksa Email Anda</p>
             <p className="leading-relaxed">
               Tautan aktivasi telah dikirimkan ke{" "}
-              <strong className="text-zinc-900 font-semibold">{successResult.onboarding.email_sent_to}</strong>.
+              <strong className="text-zinc-900 font-semibold">
+                {successResult.onboarding.email_sent_to}
+              </strong>
+              .
             </p>
           </div>
         )}
@@ -166,7 +169,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
         <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
           <a
             href={posLoginUrl}
-            style={{ backgroundColor: '#141413', color: '#ffffff' }}
+            style={{ backgroundColor: "#141413", color: "#ffffff" }}
             className="btn-primary-black flex-1 inline-flex items-center justify-center h-10 rounded-md text-xs font-medium transition active:scale-[0.98]"
           >
             Buka Halaman Masuk POS
@@ -187,9 +190,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
     <div className="w-full text-zinc-950">
       {/* Heading Block */}
       <div className="mb-6">
-        <h1 className="text-2xl font-medium tracking-tight text-zinc-950">
-          Daftarkan Bisnis Anda
-        </h1>
+        <h1 className="text-2xl font-medium tracking-tight text-zinc-950">Daftarkan Bisnis Anda</h1>
         <p className="text-sm text-zinc-500 mt-1.5">
           Lengkapi data di bawah ini untuk membuat workspace operasional Apeiron POS.
         </p>
@@ -241,10 +242,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
 
         {/* Owner Name */}
         <div>
-          <label
-            htmlFor="reg-owner"
-            className="block text-[13px] font-medium text-zinc-800 mb-1.5"
-          >
+          <label htmlFor="reg-owner" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
             Nama Lengkap Pemilik
           </label>
           <input
@@ -261,10 +259,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
 
         {/* Owner Email */}
         <div>
-          <label
-            htmlFor="reg-email"
-            className="block text-[13px] font-medium text-zinc-800 mb-1.5"
-          >
+          <label htmlFor="reg-email" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
             Email Bisnis (Login)
           </label>
           <input
@@ -284,10 +279,7 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
 
         {/* Owner Phone */}
         <div>
-          <label
-            htmlFor="reg-phone"
-            className="block text-[13px] font-medium text-zinc-800 mb-1.5"
-          >
+          <label htmlFor="reg-phone" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
             Nomor WhatsApp / Telepon{" "}
             <span className="text-zinc-400 font-normal text-xs">(Opsional)</span>
           </label>
@@ -307,12 +299,16 @@ export function RegistrationForm({ posLoginUrl = "http://localhost:8000/login" }
           <button
             type="submit"
             disabled={isLoading}
-            style={{ backgroundColor: '#141413', color: '#ffffff' }}
+            style={{ backgroundColor: "#141413", color: "#ffffff" }}
             className="btn-primary-black w-full h-10 px-4 rounded-md font-medium transition-colors flex items-center justify-center gap-2 text-white text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-xs active:scale-[0.99]"
           >
             {isLoading ? (
               <>
-                <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                <svg
+                  className="animate-spin h-3.5 w-3.5 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
                   <circle
                     className="opacity-25"
                     cx="12"

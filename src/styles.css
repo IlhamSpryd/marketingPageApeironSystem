@@ -18,16 +18,18 @@
  */
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans:
+    "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
   --font-brand: "Playfair Display", Georgia, serif;
   --font-serif: "Playfair Display", Georgia, serif;
 
-  --color-apeiron-bg: #F7F7F5;
-  --color-apeiron-ink: #37352F;
+  --color-apeiron-bg: #f7f7f5;
+  --color-apeiron-ink: #37352f;
   --color-apeiron-muted: #787774;
-  --color-apeiron-muted-700: #6B6A66;
-  --color-apeiron-border: #E9E9E7;
-  --color-apeiron-surface: #F1F1EF;
+  --color-apeiron-muted-700: #6b6a66;
+  --color-apeiron-border: #e9e9e7;
+  --color-apeiron-surface: #f1f1ef;
 }
 
 @theme inline {
@@ -158,27 +160,34 @@
 
 /* Crisp, restrained input transitions */
 .field-input {
-  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
 }
 .field-input:hover:not(:disabled):not([readonly]) {
-  border-color: #A1A1AA;
+  border-color: #a1a1aa;
 }
 .field-input:focus {
   outline: none;
-  border-color: #09090B;
-  box-shadow: 0 0 0 1px #09090B;
+  border-color: #09090b;
+  box-shadow: 0 0 0 1px #09090b;
 }
 
 /* Subtle editorial lighting for right brand panel */
 .editorial-surface {
-  background-color: #0A0A0B;
-  background-image: radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.04) 0%, transparent 55%);
+  background-color: #0a0a0b;
+  background-image: radial-gradient(
+    circle at 85% 15%,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 55%
+  );
 }
 
 /* Guaranteed Obsidian Black CTA Button */
 .btn-primary-black {
   background-color: #141413 !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 .btn-primary-black:hover:not(:disabled) {
   background-color: #27272a !important;
