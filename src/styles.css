@@ -17,6 +17,19 @@
  * 2. Register it in @theme inline as --color-<name>: var(--<name>)
  */
 
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-brand: "Playfair Display", Georgia, serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+
+  --color-apeiron-bg: #F7F7F5;
+  --color-apeiron-ink: #37352F;
+  --color-apeiron-muted: #787774;
+  --color-apeiron-muted-700: #6B6A66;
+  --color-apeiron-border: #E9E9E7;
+  --color-apeiron-surface: #F1F1EF;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

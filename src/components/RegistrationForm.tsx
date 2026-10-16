@@ -1,4 +1,14 @@
 import React, { useState } from "react";
+import {
+  Store,
+  User,
+  Mail,
+  Phone,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 import type { ProvisioningResult, ProvisioningSuccessResult } from "@/types/provisioning";
 
 interface FormState {
@@ -41,7 +51,7 @@ export function RegistrationForm() {
 
     // Client-side quick validation
     if (!formData.tenant_name.trim()) {
-      setErrorMessage("Nama bisnis/usaha wajib diisi.");
+      setErrorMessage("Nama bisnis/brand wajib diisi.");
       return;
     }
     if (!formData.owner_name.trim()) {
@@ -75,8 +85,6 @@ export function RegistrationForm() {
       if (json.success) {
         setSuccessResult(json as ProvisioningSuccessResult);
       } else if ((json as { error?: string }).error === "provisioning_pending") {
-        // M-A03: provisioning masih diproses POS — data tidak gagal, jadi ini
-        // bukan banner error merah, melainkan pemberitahuan tenang.
         setIsPendingNotice(true);
         setErrorMessage(json.message || null);
       } else {
@@ -104,175 +112,139 @@ export function RegistrationForm() {
     setErrorMessage(null);
   };
 
-  return (
-    <div className="w-full max-w-xl mx-auto rounded-3xl border border-white/[0.08] bg-[#0B0B0C]/90 p-8 sm:p-10 shadow-2xl backdrop-blur-xl transition-all text-[#E4E4E7]">
-      {successResult ? (
-        <div className="space-y-6 text-center animate-in fade-in zoom-in-95 duration-300">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 shadow-sm">
-            <svg
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+  if (successResult) {
+    return (
+      <div className="w-full text-[#37352F] space-y-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 shadow-xs">
+          <CheckCircle2 className="h-7 w-7" />
+        </div>
+
+        <div className="text-center space-y-1">
+          <h3 className="text-2xl font-bold tracking-tight text-[#37352F]">
+            Registrasi Berhasil!
+          </h3>
+          <p className="text-sm text-[#787774]">
+            Workspace bisnis Anda telah berhasil disiapkan di Apeiron POS.
+          </p>
+        </div>
+
+        {/* Data Summary */}
+        <div className="rounded-xl border border-[#E9E9E7] bg-[#F7F7F5] p-5 text-sm space-y-2.5">
+          <div className="flex justify-between items-center pb-2 border-b border-[#E9E9E7]">
+            <span className="text-[#787774] font-medium text-xs uppercase tracking-wider">Bisnis / Brand</span>
+            <span className="font-semibold text-[#37352F]">{formData.tenant_name}</span>
           </div>
-
-          <div>
-            <h3 className="text-2xl font-bold tracking-tight text-[#F7F6F2]">
-              Registrasi Berhasil!
-            </h3>
-            <p className="mt-2 text-sm text-[#A9A79E]">
-              Tenant bisnis Anda telah siap diprovisioning di Apeiron POS.
-            </p>
+          <div className="flex justify-between items-center pb-2 border-b border-[#E9E9E7]">
+            <span className="text-[#787774] font-medium text-xs uppercase tracking-wider">Pemilik (Owner)</span>
+            <span className="font-semibold text-[#37352F]">{formData.owner_name}</span>
           </div>
-
-          <div className="rounded-2xl border border-white/[0.08] bg-black/60 p-5 text-left text-sm space-y-2.5">
-            <div className="flex justify-between items-center pb-2 border-b border-white/[0.06]">
-              <span className="text-[#A1A1AA] font-medium">Bisnis</span>
-              <span className="font-semibold text-white">{formData.tenant_name}</span>
-            </div>
-            <div className="flex justify-between items-center pb-2 border-b border-white/[0.06]">
-              <span className="text-[#A1A1AA] font-medium">Pemilik</span>
-              <span className="font-semibold text-white">{formData.owner_name}</span>
-            </div>
-            <div className="flex justify-between items-center pb-2 border-b border-white/[0.06]">
-              <span className="text-[#A1A1AA] font-medium">Email</span>
-              <span className="font-semibold text-white">{formData.owner_email}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[#8F8D85] font-medium">Tenant ID</span>
-              <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[#2E2D29] text-[#E9E8E3]">
-                #{successResult.tenant_id}
-              </span>
-            </div>
+          <div className="flex justify-between items-center pb-2 border-b border-[#E9E9E7]">
+            <span className="text-[#787774] font-medium text-xs uppercase tracking-wider">Email Login</span>
+            <span className="font-semibold text-[#37352F]">{formData.owner_email}</span>
           </div>
-
-          {successResult.onboarding.activation_url ? (
-            <div className="rounded-2xl border border-amber-900/60 bg-amber-950/40 p-4 text-left text-xs text-amber-200 space-y-3">
-              <div className="flex items-center gap-2 font-semibold text-amber-300">
-                <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-                Mode Lokal: Tautan Aktivasi Langsung Tersedia
-              </div>
-              <p className="text-amber-200/90 leading-relaxed">
-                Email simulasi telah tercatat di Outbox. Anda dapat langsung mengaktifkan akun dan
-                menetapkan password sekarang:
-              </p>
-              <a
-                href={successResult.onboarding.activation_url}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-4 py-3 text-sm shadow-sm transition active:scale-[0.99]"
-              >
-                Lanjutkan ke Aktivasi & Set Password ➜
-              </a>
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-blue-900/60 bg-blue-950/40 p-4 text-left text-xs text-blue-200">
-              <p className="font-semibold text-blue-300 mb-1">Cek Email Anda</p>
-              <p>
-                Tautan aktivasi akun Owner telah dikirim ke{" "}
-                <span className="font-medium text-white">
-                  {successResult.onboarding.email_sent_to}
-                </span>
-                . Buka email tersebut untuk mengatur kata sandi Anda.
-              </p>
-            </div>
-          )}
-
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <a
-              href={posLoginUrl}
-              className="flex-1 inline-flex items-center justify-center rounded-xl bg-white text-black px-5 py-3 text-sm font-semibold shadow-sm hover:bg-neutral-200 transition active:scale-[0.99]"
-            >
-              Buka Halaman Login POS
-            </a>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center justify-center rounded-xl border border-[#2E2D29] bg-[#201F1D] px-5 py-3 text-sm font-semibold text-[#E9E8E3] hover:bg-[#2A2926] transition"
-            >
-              Daftar Bisnis Lain
-            </button>
+          <div className="flex justify-between items-center">
+            <span className="text-[#787774] font-medium text-xs uppercase tracking-wider">Tenant ID</span>
+            <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-[#E9E9E7] text-[#37352F]">
+              #{successResult.tenant_id}
+            </span>
           </div>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-          <div className="text-center pb-2">
-            <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#A9A79E] bg-[#2E2D29]/70 rounded-full mb-2">
-              Mulai Uji Coba Gratis
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F7F6F2]">
-              Daftarkan Bisnis Anda
-            </h3>
-            <p className="mt-1.5 text-sm text-[#A9A79E]">
-              Lengkapi formulir berikut untuk memulai onboarding Apeiron POS.
+
+        {/* Local magic link direct activation or email notice */}
+        {successResult.onboarding.activation_url ? (
+          <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 text-xs text-amber-900 space-y-2.5">
+            <div className="flex items-center gap-2 font-semibold text-amber-900 text-sm">
+              <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+              Mode Development: Tautan Aktivasi Langsung Tersedia
+            </div>
+            <p className="text-amber-800 leading-relaxed">
+              Email simulasi telah tercatat di Outbox. Anda dapat langsung mengaktifkan akun dan menetapkan kata sandi:
+            </p>
+            <a
+              href={successResult.onboarding.activation_url}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#37352F] hover:bg-[#201F1D] text-white font-semibold px-4 py-3 text-sm shadow-xs transition active:scale-[0.98]"
+            >
+              Lanjutkan ke Aktivasi &amp; Set Password ➜
+            </a>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-4 text-xs text-blue-900 space-y-1">
+            <p className="font-semibold text-blue-900 text-sm">Cek Email Masuk Anda</p>
+            <p className="text-blue-800 leading-relaxed">
+              Tautan aktivasi akun Owner telah dikirimkan ke{" "}
+              <strong className="text-blue-950 font-semibold">{successResult.onboarding.email_sent_to}</strong>.
+              Buka email tersebut untuk mengonfirmasi akun dan menetapkan kata sandi POS Anda.
             </p>
           </div>
+        )}
 
-          {isPendingNotice && errorMessage && (
-            <div
-              className="rounded-2xl border border-blue-900/60 bg-blue-950/40 p-4 text-sm text-blue-200 flex items-start gap-3 animate-in fade-in"
-              role="status"
-              aria-live="polite"
-            >
-              <svg
-                className="h-5 w-5 shrink-0 text-blue-400 mt-0.5 animate-pulse"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div>
-                <p className="font-semibold text-blue-200">Registrasi Anda sedang diproses</p>
-                <p className="mt-0.5 text-xs text-blue-300">{errorMessage}</p>
-                <p className="mt-1.5 text-xs text-blue-300/80">
-                  Data Anda sudah kami terima dan tidak akan terdaftar ganda. Silakan coba kirim
-                  ulang beberapa saat lagi, atau hubungi tim kami bila masih berlanjut.
-                </p>
-              </div>
-            </div>
-          )}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <a
+            href={posLoginUrl}
+            className="flex-1 inline-flex items-center justify-center rounded-xl bg-[#37352F] text-white px-5 py-3 text-sm font-semibold shadow-xs hover:bg-[#201F1D] transition active:scale-[0.98]"
+          >
+            Buka Halaman Login POS
+          </a>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center justify-center rounded-xl border border-[#E9E9E7] bg-[#F7F7F5] px-5 py-3 text-sm font-semibold text-[#37352F] hover:bg-[#EAEAE7] transition active:scale-[0.98] cursor-pointer"
+          >
+            Daftar Bisnis Lain
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-          {errorMessage && !isPendingNotice && (
-            <div
-              className="rounded-2xl border border-rose-900/60 bg-rose-950/50 p-4 text-sm text-rose-300 flex items-start gap-3 animate-in fade-in"
-              role="alert"
-            >
-              <svg
-                className="h-5 w-5 shrink-0 text-rose-400 mt-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-              <div>
-                <p className="font-semibold text-rose-200">Pendaftaran Gagal</p>
-                <p className="mt-0.5 text-xs text-rose-300">{errorMessage}</p>
-              </div>
-            </div>
-          )}
-
-          <div className="space-y-4">
+  return (
+    <div className="w-full text-[#37352F]">
+      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+        {/* Error Notice */}
+        {errorMessage && !isPendingNotice && (
+          <div
+            className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 flex items-start gap-3 animate-in fade-in duration-200"
+            role="alert"
+          >
+            <AlertCircle className="h-5 w-5 shrink-0 text-rose-600 mt-0.5" />
             <div>
-              <label
-                htmlFor="reg-tenant"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#A9A79E] mb-1.5"
-              >
-                Nama Bisnis / Brand <span className="text-rose-400">*</span>
-              </label>
+              <p className="font-semibold text-rose-900">Pendaftaran Belum Berhasil</p>
+              <p className="mt-0.5 text-xs text-rose-700 leading-relaxed">{errorMessage}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Pending Notice */}
+        {isPendingNotice && errorMessage && (
+          <div
+            className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 flex items-start gap-3 animate-in fade-in duration-200"
+            role="status"
+            aria-live="polite"
+          >
+            <Clock className="h-5 w-5 shrink-0 text-blue-600 mt-0.5 animate-pulse" />
+            <div>
+              <p className="font-semibold text-blue-950">Registrasi Sedang Diproses</p>
+              <p className="mt-0.5 text-xs text-blue-800 leading-relaxed">{errorMessage}</p>
+              <p className="mt-1.5 text-xs text-blue-700">
+                Data Anda sudah kami terima dan tidak akan terdaftar ganda. Silakan coba kembali beberapa saat lagi.
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          {/* Tenant Name */}
+          <div>
+            <label
+              htmlFor="reg-tenant"
+              className="block text-sm font-medium mb-1.5 text-[#37352F]"
+            >
+              Nama Bisnis / Brand <span className="text-rose-500">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#9B9A97]">
+                <Store className="h-4 w-4" />
+              </div>
               <input
                 id="reg-tenant"
                 name="tenant_name"
@@ -281,17 +253,26 @@ export function RegistrationForm() {
                 value={formData.tenant_name}
                 onChange={handleChange}
                 placeholder="Contoh: Kopi Ruang Teduh"
-                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
+                className="w-full rounded-xl border border-[#E9E9E7] bg-[#F7F7F5] pl-10 pr-4 py-2.5 sm:py-3 text-sm text-[#37352F] placeholder-[#9B9A97] focus:bg-white focus:border-[#37352F] focus:outline-none focus:ring-2 focus:ring-[#37352F]/15 transition-all duration-200 shadow-2xs"
               />
             </div>
+            <p className="mt-1 text-xs text-[#787774]">
+              Nama brand usaha yang akan dicetak pada struk kasir dan laporan.
+            </p>
+          </div>
 
-            <div>
-              <label
-                htmlFor="reg-owner"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5"
-              >
-                Nama Lengkap Pemilik <span className="text-rose-400">*</span>
-              </label>
+          {/* Owner Name */}
+          <div>
+            <label
+              htmlFor="reg-owner"
+              className="block text-sm font-medium mb-1.5 text-[#37352F]"
+            >
+              Nama Lengkap Pemilik <span className="text-rose-500">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#9B9A97]">
+                <User className="h-4 w-4" />
+              </div>
               <input
                 id="reg-owner"
                 name="owner_name"
@@ -300,17 +281,26 @@ export function RegistrationForm() {
                 value={formData.owner_name}
                 onChange={handleChange}
                 placeholder="Contoh: Budi Santoso"
-                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
+                className="w-full rounded-xl border border-[#E9E9E7] bg-[#F7F7F5] pl-10 pr-4 py-2.5 sm:py-3 text-sm text-[#37352F] placeholder-[#9B9A97] focus:bg-white focus:border-[#37352F] focus:outline-none focus:ring-2 focus:ring-[#37352F]/15 transition-all duration-200 shadow-2xs"
               />
             </div>
+            <p className="mt-1 text-xs text-[#787774]">
+              Nama akun pengelola utama (Tenant Owner) dengan hak akses penuh.
+            </p>
+          </div>
 
-            <div>
-              <label
-                htmlFor="reg-email"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5"
-              >
-                Email Bisnis (Login) <span className="text-rose-400">*</span>
-              </label>
+          {/* Owner Email */}
+          <div>
+            <label
+              htmlFor="reg-email"
+              className="block text-sm font-medium mb-1.5 text-[#37352F]"
+            >
+              Email Bisnis (Login) <span className="text-rose-500">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#9B9A97]">
+                <Mail className="h-4 w-4" />
+              </div>
               <input
                 id="reg-email"
                 name="owner_email"
@@ -319,18 +309,27 @@ export function RegistrationForm() {
                 value={formData.owner_email}
                 onChange={handleChange}
                 placeholder="budi@kopiruangteduh.com"
-                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
+                className="w-full rounded-xl border border-[#E9E9E7] bg-[#F7F7F5] pl-10 pr-4 py-2.5 sm:py-3 text-sm text-[#37352F] placeholder-[#9B9A97] focus:bg-white focus:border-[#37352F] focus:outline-none focus:ring-2 focus:ring-[#37352F]/15 transition-all duration-200 shadow-2xs"
               />
             </div>
+            <p className="mt-1 text-xs text-[#787774]">
+              Tautan aktivasi akun dan kata sandi akan dikirim ke email ini.
+            </p>
+          </div>
 
-            <div>
-              <label
-                htmlFor="reg-phone"
-                className="block text-xs font-semibold uppercase tracking-wider text-[#A1A1AA] mb-1.5"
-              >
-                Nomor WhatsApp / Telepon{" "}
-                <span className="text-[#71717A] font-normal">(Opsional)</span>
-              </label>
+          {/* Owner Phone */}
+          <div>
+            <label
+              htmlFor="reg-phone"
+              className="block text-sm font-medium mb-1.5 text-[#37352F]"
+            >
+              Nomor WhatsApp / Telepon{" "}
+              <span className="text-[#9B9A97] font-normal normal-case">(Opsional)</span>
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#9B9A97]">
+                <Phone className="h-4 w-4" />
+              </div>
               <input
                 id="reg-phone"
                 name="owner_phone"
@@ -338,53 +337,66 @@ export function RegistrationForm() {
                 value={formData.owner_phone}
                 onChange={handleChange}
                 placeholder="081234567890"
-                className="w-full rounded-xl border border-white/[0.08] bg-black/60 px-4 py-3 text-sm text-white placeholder-[#71717A] focus:bg-black/90 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
+                className="w-full rounded-xl border border-[#E9E9E7] bg-[#F7F7F5] pl-10 pr-4 py-2.5 sm:py-3 text-sm text-[#37352F] placeholder-[#9B9A97] focus:bg-white focus:border-[#37352F] focus:outline-none focus:ring-2 focus:ring-[#37352F]/15 transition-all duration-200 shadow-2xs"
               />
             </div>
+            <p className="mt-1 text-xs text-[#787774]">
+              Dukungan verifikasi dua arah dan informasi operasional penting.
+            </p>
           </div>
+        </div>
 
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-white text-black px-5 py-3.5 text-sm font-semibold shadow-md hover:bg-neutral-200 disabled:opacity-60 disabled:cursor-not-allowed transition duration-200 active:scale-[0.99]"
-            >
-              {isLoading ? (
-                <>
-                  <svg className="animate-spin h-4 w-4 text-black" fill="none" viewBox="0 0 24 24">
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  <span>Mendaftarkan Bisnis...</span>
-                </>
-              ) : (
-                <span>Daftar Sekarang & Mulai Onboarding ➜</span>
-              )}
-            </button>
-          </div>
+        {/* Submit Button */}
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#37352F] text-white px-5 py-3.5 text-sm font-semibold shadow-xs hover:bg-[#201F1D] focus:outline-none focus:ring-2 focus:ring-[#37352F]/20 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 active:scale-[0.99] cursor-pointer group"
+          >
+            {isLoading ? (
+              <>
+                <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                <span>Mendaftarkan Bisnis...</span>
+              </>
+            ) : (
+              <>
+                <span>Daftar Sekarang &amp; Mulai Onboarding</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </>
+            )}
+          </button>
+        </div>
 
-          <p className="text-center text-xs text-[#A9A79E] pt-1">
-            Sudah memiliki akun?{" "}
-            <a
-              href={posLoginUrl}
-              className="font-semibold text-[#F7F6F2] hover:text-white underline"
-            >
-              Masuk ke Apeiron POS
-            </a>
-          </p>
-        </form>
-      )}
+        <p className="text-center text-xs text-[#787774] leading-relaxed pt-1">
+          Dengan mendaftar, Anda menyetujui{" "}
+          <span className="text-[#37352F] font-medium underline underline-offset-2">Ketentuan Layanan</span> dan{" "}
+          <span className="text-[#37352F] font-medium underline underline-offset-2">Kebijakan Privasi</span> Apeiron POS.
+        </p>
+
+        <p className="text-center text-xs text-[#787774]">
+          Sudah memiliki akun bisnis?{" "}
+          <a
+            href={posLoginUrl}
+            className="font-semibold text-[#37352F] hover:text-black underline underline-offset-2"
+          >
+            Masuk ke Apeiron POS
+          </a>
+        </p>
+      </form>
     </div>
   );
 }
