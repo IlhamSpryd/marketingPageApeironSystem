@@ -4,11 +4,11 @@ import { RegistrationForm } from "@/components/RegistrationForm";
 export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
-      { title: "Daftar Akun Bisnis — Apeiron POS" },
+      { title: "Register Business — Apeiron POS" },
       {
         name: "description",
         content:
-          "Daftarkan bisnis F&B Anda di Apeiron POS. Platform operasional terpadu untuk kasir, dapur, inventaris, dan multi-cabang.",
+          "Register your food and beverage business on Apeiron POS. Unified operations for point of sale, kitchen display, inventory, and multi-branch management.",
       },
     ],
   }),
@@ -22,7 +22,7 @@ export function RegisterPage() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full bg-white overflow-x-hidden font-sans antialiased text-zinc-950 selection:bg-zinc-900 selection:text-white">
-      {/* KIRI: KONTEN FORM REGISTRASI */}
+      {/* LEFT: REGISTRATION FORM CONTENT */}
       <div className="md:col-span-1 lg:col-span-7 flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 w-full relative bg-white min-h-screen">
         {/* Form Mount strictly clamped to max-w-sm / 384px */}
         <div className="my-auto py-4 sm:py-6 w-full max-w-sm mx-auto" style={{ maxWidth: 384 }}>
@@ -37,7 +37,7 @@ export function RegisterPage() {
           <span>© {new Date().getFullYear()} Apeiron Systems</span>
           <div className="flex items-center gap-4">
             <Link to="/" className="hover:text-zinc-600 transition-colors">
-              Beranda
+              Home
             </Link>
             <a
               href="#privacy"
@@ -57,7 +57,7 @@ export function RegisterPage() {
         </div>
       </div>
 
-      {/* KANAN: EDITORIAL BRAND PANEL */}
+      {/* RIGHT: EDITORIAL BRAND PANEL */}
       <div
         className="hidden md:flex md:col-span-1 lg:col-span-5 editorial-surface text-white p-8 sm:p-10 lg:p-12 xl:p-14 flex-col justify-between select-none relative overflow-hidden bg-[#0A0A0B] min-h-screen"
         aria-hidden="true"
@@ -69,35 +69,35 @@ export function RegisterPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/60 to-transparent pointer-events-none" />
 
         <div className="relative z-10 text-xs text-zinc-400 font-medium tracking-wide">
-          Pengaturan Workspace
+          Workspace Setup
         </div>
 
         <div className="relative z-10 my-auto max-w-xs space-y-8">
           <div className="space-y-2">
             <p className="text-lg font-normal tracking-tight text-zinc-100 leading-snug">
-              Point of sale, ledger inventaris, dan rekonsiliasi kasir untuk bisnis F&amp;B modern.
+              Point of sale, inventory ledger, and cashier reconciliation built for modern hospitality.
             </p>
           </div>
 
           <div className="space-y-6 border-l border-zinc-800 pl-5">
             <div>
-              <div className="text-xs text-white font-medium">1. Pendaftaran Bisnis</div>
+              <div className="text-xs text-white font-medium">1. Business Registration</div>
               <div className="text-xs text-zinc-400 mt-0.5">
-                Daftarkan nama usaha dan identitas pemilik untuk menginisialisasi tenant.
+                Register your business name and owner details to initialize your workspace.
               </div>
             </div>
 
             <div>
-              <div className="text-xs text-zinc-500">2. Aktivasi &amp; Kata Sandi</div>
+              <div className="text-xs text-zinc-500">2. Activation &amp; Credentials</div>
               <div className="text-xs text-zinc-500 mt-0.5">
-                Verifikasi akun dan tentukan kata sandi master owner melalui tautan email.
+                Verify your account and configure your master password via email activation.
               </div>
             </div>
 
             <div>
-              <div className="text-xs text-zinc-500">3. Cabang &amp; Operasional</div>
+              <div className="text-xs text-zinc-500">3. Branch &amp; Operations</div>
               <div className="text-xs text-zinc-500 mt-0.5">
-                Konfigurasi gerai pertama, meja, produk, dan mulai mencatat penjualan.
+                Configure your primary branch, tables, products, and begin recording sales.
               </div>
             </div>
           </div>

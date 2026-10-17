@@ -32,8 +32,8 @@ describe("RegisterPage Typography & Chatbot Absence", () => {
     expect(screen.queryByAltText("Apeiron System Logo")).not.toBeInTheDocument();
 
     // Form heading and inputs must be present
-    expect(screen.getByRole("heading", { name: /Daftarkan Bisnis Anda/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/Nama Bisnis/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Register your business/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Business or brand name/i)).toBeInTheDocument();
   });
 
   it("does not render the Apeiron Chat Widget on the register page", () => {

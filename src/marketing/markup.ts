@@ -39,7 +39,7 @@ export const markup = `
     </div>
     <div class="nav-r">
       <a class="login" href="#start">Log in</a>
-      <a class="btn btn-primary btn-sm" href="#start">Get Started</a>
+      <a class="btn btn-primary btn-sm" href="/register">Get Started</a>
       <button class="burger" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
       </button>
@@ -233,7 +233,7 @@ export const markup = `
       <a href="#pricing">Pricing Plans</a>
     </div>
     <div class="menu-foot">
-      <a class="btn btn-primary" href="#start" style="width:100%;text-align:center">Get Started</a>
+      <a class="btn btn-primary" href="/register" style="width:100%;text-align:center">Get Started</a>
     </div>
   </div>
 </nav>
@@ -255,7 +255,7 @@ export const markup = `
     </h1>
     <p class="lead" data-in style="--d:220ms">Sales, inventory, cash, kitchen operations, and reporting — connected in one system built for growing F&amp;B businesses.</p>
     <div class="btn-row" data-in style="--d:320ms">
-      <a class="btn btn-primary" href="#start">Get Started</a>
+      <a class="btn btn-primary" href="/register">Get Started</a>
       <a class="btn btn-secondary" href="#product">Explore the Product</a>
     </div>
 
@@ -668,7 +668,7 @@ export const markup = `
           <li>Shifts and cash control</li>
           <li>Sales reporting</li>
         </ul>
-        <a class="btn btn-secondary" href="#start">Contact sales</a>
+        <a class="btn btn-secondary" href="/register">Contact sales</a>
       </div>
       <div class="plan dk">
         <div class="plan-tag">Recommended for Chains</div>
@@ -680,7 +680,7 @@ export const markup = `
           <li>Per-branch stock and cash</li>
           <li>Audit trail and access control</li>
         </ul>
-        <a class="btn btn-primary" href="#start">Contact sales</a>
+        <a class="btn btn-primary" href="/register">Contact sales</a>
       </div>
     </div>
   </div>
@@ -692,7 +692,7 @@ export const markup = `
     <h2 class="h-xl" style="font-size:clamp(2.5rem,6.4vw,5.5rem)">Bring your operation<br>into one system.</h2>
     <p class="lead">Build a clearer, more controlled way to run your F&amp;B business.</p>
     <div class="btn-row">
-      <a class="btn btn-primary" href="#start">Get Started</a>
+      <a class="btn btn-primary" href="/register">Get Started</a>
       <a class="btn btn-secondary" href="#product">Explore Apeiron</a>
     </div>
   </div>

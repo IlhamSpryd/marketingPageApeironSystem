@@ -42,16 +42,16 @@ export function RegistrationForm({
 
     // Client-side quick validation
     if (!formData.tenant_name.trim()) {
-      setErrorMessage("Nama bisnis/brand wajib diisi.");
+      setErrorMessage("Business or brand name is required.");
       return;
     }
     if (!formData.owner_name.trim()) {
-      setErrorMessage("Nama lengkap pemilik wajib diisi.");
+      setErrorMessage("Owner full name is required.");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.owner_email.trim() || !emailRegex.test(formData.owner_email.trim())) {
-      setErrorMessage("Format email tidak valid.");
+      setErrorMessage("Please enter a valid email address.");
       return;
     }
 
@@ -79,13 +79,13 @@ export function RegistrationForm({
         setIsPendingNotice(true);
         setErrorMessage(json.message || null);
       } else {
-        setErrorMessage(json.message || "Gagal melakukan registrasi.");
+        setErrorMessage(json.message || "Registration could not be completed.");
       }
     } catch (err: unknown) {
       const message =
         err instanceof Error
           ? err.message
-          : "Terjadi kesalahan saat menghubungi server. Pastikan jaringan terhubung.";
+          : "An error occurred while connecting to the server. Please verify your connection.";
       setErrorMessage(message);
     } finally {
       setIsLoading(false);
@@ -112,16 +112,16 @@ export function RegistrationForm({
           </div>
           <div>
             <h2 className="text-xl font-medium tracking-tight text-zinc-950">
-              Registrasi Berhasil
+              Registration Successful
             </h2>
-            <p className="text-xs text-zinc-500">Workspace telah diinisialisasi di sistem.</p>
+            <p className="text-xs text-zinc-500">Your workspace has been initialized in the system.</p>
           </div>
         </div>
 
         {/* Data Summary */}
         <div className="divide-y divide-zinc-100 border-t border-b border-zinc-100 text-xs py-1">
           <div className="py-2.5 flex justify-between items-center">
-            <span className="text-zinc-500">Bisnis</span>
+            <span className="text-zinc-500">Business</span>
             <span className="font-medium text-zinc-900">{formData.tenant_name}</span>
           </div>
           <div className="py-2.5 flex justify-between items-center">
@@ -141,27 +141,27 @@ export function RegistrationForm({
         {/* Local magic link direct activation or email notice */}
         {successResult.onboarding.activation_url ? (
           <div className="p-4 rounded-md border border-amber-200 bg-amber-50/60 text-xs text-amber-900 space-y-2">
-            <p className="font-medium">Mode Pengujian: Tautan Aktivasi Siap</p>
+            <p className="font-medium">Development Mode: Activation Link Ready</p>
             <p className="text-amber-800 leading-relaxed">
-              Anda dapat langsung mengaktifkan akun dan menetapkan kata sandi:
+              You can activate your account and configure your master password immediately:
             </p>
             <a
               href={successResult.onboarding.activation_url}
               style={{ backgroundColor: "#141413", color: "#ffffff" }}
               className="btn-primary-black inline-flex w-full items-center justify-center gap-2 rounded-md font-medium px-4 h-10 text-xs transition active:scale-[0.98]"
             >
-              Aktifkan Akun &amp; Buat Sandi ➜
+              Activate Account &amp; Set Password ➜
             </a>
           </div>
         ) : (
           <div className="p-4 rounded-md border border-zinc-200 bg-zinc-50 text-xs text-zinc-600 space-y-1">
-            <p className="font-medium text-zinc-900">Periksa Email Anda</p>
+            <p className="font-medium text-zinc-900">Check Your Email</p>
             <p className="leading-relaxed">
-              Tautan aktivasi telah dikirimkan ke{" "}
+              An activation link has been sent to{" "}
               <strong className="text-zinc-900 font-semibold">
                 {successResult.onboarding.email_sent_to}
               </strong>
-              .
+              . Follow the link to complete your master password configuration.
             </p>
           </div>
         )}
@@ -172,14 +172,14 @@ export function RegistrationForm({
             style={{ backgroundColor: "#141413", color: "#ffffff" }}
             className="btn-primary-black flex-1 inline-flex items-center justify-center h-10 rounded-md text-xs font-medium transition active:scale-[0.98]"
           >
-            Buka Halaman Masuk POS
+            Open POS Sign In
           </a>
           <button
             type="button"
             onClick={handleReset}
             className="inline-flex items-center justify-center h-10 px-4 rounded-md border border-zinc-300 bg-white text-xs font-medium text-zinc-700 hover:bg-zinc-50 transition active:scale-[0.98] cursor-pointer"
           >
-            Daftar Bisnis Lain
+            Register Another Business
           </button>
         </div>
       </div>
@@ -190,9 +190,9 @@ export function RegistrationForm({
     <div className="w-full text-zinc-950">
       {/* Heading Block */}
       <div className="mb-6">
-        <h1 className="text-2xl font-medium tracking-tight text-zinc-950">Daftarkan Bisnis Anda</h1>
-        <p className="text-sm text-zinc-500 mt-1.5">
-          Lengkapi data di bawah ini untuk membuat workspace operasional Apeiron POS.
+        <h1 className="text-2xl font-medium tracking-tight text-zinc-950">Register your business</h1>
+        <p className="text-sm text-zinc-500 mt-1.5 leading-relaxed">
+          Complete the details below to create your Apeiron POS operational workspace.
         </p>
       </div>
 
@@ -203,7 +203,7 @@ export function RegistrationForm({
             className="mb-4 pb-3 border-b border-rose-200 text-xs text-rose-600 leading-relaxed"
             role="alert"
           >
-            <span className="font-semibold block mb-0.5">Pendaftaran Belum Berhasil</span>
+            <span className="font-semibold block mb-0.5">Registration Incomplete</span>
             <span>{errorMessage}</span>
           </div>
         )}
@@ -215,7 +215,7 @@ export function RegistrationForm({
             role="status"
             aria-live="polite"
           >
-            <span className="font-semibold block mb-0.5">Registrasi Sedang Diproses</span>
+            <span className="font-semibold block mb-0.5">Registration In Progress</span>
             <span>{errorMessage}</span>
           </div>
         )}
@@ -226,7 +226,7 @@ export function RegistrationForm({
             htmlFor="reg-tenant"
             className="block text-[13px] font-medium text-zinc-800 mb-1.5"
           >
-            Nama Bisnis / Brand
+            Business or brand name
           </label>
           <input
             id="reg-tenant"
@@ -235,7 +235,7 @@ export function RegistrationForm({
             required
             value={formData.tenant_name}
             onChange={handleChange}
-            placeholder="Contoh: Kopi Ruang Teduh"
+            placeholder="e.g., The Roastery Cafe"
             className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
           />
         </div>
@@ -243,7 +243,7 @@ export function RegistrationForm({
         {/* Owner Name */}
         <div>
           <label htmlFor="reg-owner" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
-            Nama Lengkap Pemilik
+            Owner full name
           </label>
           <input
             id="reg-owner"
@@ -252,7 +252,7 @@ export function RegistrationForm({
             required
             value={formData.owner_name}
             onChange={handleChange}
-            placeholder="Contoh: Budi Santoso"
+            placeholder="e.g., Alex Morgan"
             className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
           />
         </div>
@@ -260,7 +260,7 @@ export function RegistrationForm({
         {/* Owner Email */}
         <div>
           <label htmlFor="reg-email" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
-            Email Bisnis (Login)
+            Business email (sign in)
           </label>
           <input
             id="reg-email"
@@ -273,15 +273,15 @@ export function RegistrationForm({
             className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
           />
           <p className="mt-1 text-xs text-zinc-400">
-            Tautan aktivasi akun dan kata sandi akan dikirim ke alamat ini.
+            Your master password setup link will be sent to this email address.
           </p>
         </div>
 
         {/* Owner Phone */}
         <div>
           <label htmlFor="reg-phone" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
-            Nomor WhatsApp / Telepon{" "}
-            <span className="text-zinc-400 font-normal text-xs">(Opsional)</span>
+            Phone or WhatsApp{" "}
+            <span className="text-zinc-400 font-normal text-xs">(Optional)</span>
           </label>
           <input
             id="reg-phone"
@@ -289,7 +289,7 @@ export function RegistrationForm({
             type="tel"
             value={formData.owner_phone}
             onChange={handleChange}
-            placeholder="081234567890"
+            placeholder="+1 555 123 4567"
             className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
           />
         </div>
@@ -323,22 +323,22 @@ export function RegistrationForm({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
-                <span>Mendaftarkan Bisnis...</span>
+                <span>Registering business...</span>
               </>
             ) : (
-              <span>Daftarkan Bisnis</span>
+              <span>Register business</span>
             )}
           </button>
         </div>
 
         {/* Link to Login */}
         <div className="mt-8 pt-6 border-t border-zinc-100 text-xs text-zinc-500 leading-relaxed text-center sm:text-left">
-          Sudah memiliki akun bisnis?{" "}
+          Already have a business account?{" "}
           <a
             href={posLoginUrl}
             className="text-zinc-950 font-medium hover:underline underline-offset-4 ml-1"
           >
-            Masuk ke sistem
+            Sign in
           </a>
         </div>
       </form>
