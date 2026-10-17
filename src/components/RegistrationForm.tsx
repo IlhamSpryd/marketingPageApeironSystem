@@ -289,7 +289,7 @@ export function RegistrationForm({
             type="tel"
             value={formData.owner_phone}
             onChange={handleChange}
-            placeholder="+1 555 123 4567"
+            placeholder="+62 812 3456 7890"
             className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
           />
         </div>
