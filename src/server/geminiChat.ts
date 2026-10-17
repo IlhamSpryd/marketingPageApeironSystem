@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { APEIRON_SYSTEM_CONTEXT } from "../marketing/aiKnowledge";
 
 export interface ChatMessage {
@@ -41,6 +43,66 @@ interface GeminiApiResponse {
     message?: string;
     status?: string;
   };
+}
+
+/**
+ * Robustly retrieves the Gemini API key from various runtime contexts:
+ * 1. Runtime env argument (Nitro/Vinxi/Cloudflare)
+ * 2. process.env (Node.js)
+ * 3. Direct .env file read from project root (handles Vite dev server caching)
+ */
+export function getGeminiApiKey(env?: unknown): string {
+  // 1. Check passed env parameter (e.g. from Cloudflare / Nitro / Vinxi)
+  if (env && typeof env === "object") {
+    const candidate =
+      (env as Record<string, unknown>)["GEMINI_API_KEY"] ||
+      (env as Record<string, unknown>)["VITE_GEMINI_API_KEY"];
+    if (typeof candidate === "string" && candidate.trim()) {
+      return candidate.trim();
+    }
+  }
+
+  // 2. Check process.env
+  if (typeof process !== "undefined" && process.env) {
+    const fromProcess =
+      process.env["GEMINI_API_KEY"] || process.env["VITE_GEMINI_API_KEY"];
+    if (fromProcess && fromProcess.trim()) {
+      return fromProcess.trim();
+    }
+  }
+
+  // 3. Fallback: Read directly from .env file in project root
+  // (Skipped in unit test runners when keys are unset for test isolation)
+  if (
+    typeof process !== "undefined" &&
+    (process.env?.["VITEST"] === "true" || process.env?.["NODE_ENV"] === "test")
+  ) {
+    return "";
+  }
+
+  try {
+    const cwd = typeof process !== "undefined" && process.cwd ? process.cwd() : ".";
+    const envPaths = [
+      path.resolve(cwd, ".env"),
+      path.resolve(cwd, "marketingPageApeironSystem/.env"),
+    ];
+
+    for (const p of envPaths) {
+      if (fs.existsSync(p)) {
+        const content = fs.readFileSync(p, "utf-8");
+        const match = content.match(
+          /^\s*(?:VITE_)?GEMINI_API_KEY\s*=\s*["']?([^"'\r\n]+)["']?/m,
+        );
+        if (match && match[1] && match[1].trim()) {
+          return match[1].trim();
+        }
+      }
+    }
+  } catch {
+    // Ignore filesystem read errors in edge runtimes
+  }
+
+  return "";
 }
 
 /**
@@ -152,8 +214,9 @@ function prepareGeminiContents(payload: ChatRequestPayload): GeminiContentItem[]
  */
 export async function handleGeminiChat(
   payload: unknown,
+  env?: unknown,
 ): Promise<{ status: number; data: ChatResponseData }> {
-  const apiKey = process.env["GEMINI_API_KEY"] || process.env["VITE_GEMINI_API_KEY"] || "";
+  const apiKey = getGeminiApiKey(env);
 
   if (!apiKey) {
     return {
@@ -179,11 +242,9 @@ export async function handleGeminiChat(
     };
   }
 
-  // Preferred model specified in user prompt is 'gemini-2.5-flash'.
-  // However, Google AI Studio may deprecate specific model versions or return 404 for newer keys.
-  // We try the requested model first, then gracefully fall back to latest active flash models.
-  const primaryModel = chatPayload.model || process.env["GEMINI_MODEL"] || "gemini-2.5-flash";
-  const fallbackModels = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-flash-latest"];
+  // Default to gemini-3.8-flash for Google AI Studio API
+  const primaryModel = chatPayload.model || process.env["GEMINI_MODEL"] || "gemini-3.8-flash";
+  const fallbackModels = ["gemini-3.5-flash-lite", "gemini-2.5-flash"];
   const candidateModels = [primaryModel, ...fallbackModels.filter((m) => m !== primaryModel)];
 
   let lastError = "Gagal memproses permintaan chat.";

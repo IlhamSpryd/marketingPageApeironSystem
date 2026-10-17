@@ -83,7 +83,7 @@ export default {
           try {
             const { handleGeminiChat } = await import("./server/geminiChat");
             const body = await request.json();
-            const { status, data } = await handleGeminiChat(body);
+            const { status, data } = await handleGeminiChat(body, env);
             return new Response(JSON.stringify(data), {
               status,
               headers: { "content-type": "application/json" },
