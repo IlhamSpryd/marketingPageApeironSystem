@@ -1,6 +1,37 @@
 import React, { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ChevronDown } from "lucide-react";
 import type { ProvisioningResult, ProvisioningSuccessResult } from "@/types/provisioning";
+
+interface CountryDialCode {
+  code: string;
+  name: string;
+  dialCode: string;
+  flag: string;
+}
+
+const COUNTRY_DIAL_CODES: CountryDialCode[] = [
+  { code: "ID", name: "Indonesia", dialCode: "+62", flag: "🇮🇩" },
+  { code: "MY", name: "Malaysia", dialCode: "+60", flag: "🇲🇾" },
+  { code: "SG", name: "Singapore", dialCode: "+65", flag: "🇸🇬" },
+  { code: "TH", name: "Thailand", dialCode: "+66", flag: "🇹🇭" },
+  { code: "PH", name: "Philippines", dialCode: "+63", flag: "🇵🇭" },
+  { code: "VN", name: "Vietnam", dialCode: "+84", flag: "🇻🇳" },
+  { code: "AU", name: "Australia", dialCode: "+61", flag: "🇦🇺" },
+  { code: "US", name: "United States", dialCode: "+1", flag: "🇺🇸" },
+  { code: "GB", name: "United Kingdom", dialCode: "+44", flag: "🇬🇧" },
+  { code: "JP", name: "Japan", dialCode: "+81", flag: "🇯🇵" },
+  { code: "KR", name: "South Korea", dialCode: "+82", flag: "🇰🇷" },
+  { code: "CN", name: "China", dialCode: "+86", flag: "🇨🇳" },
+  { code: "IN", name: "India", dialCode: "+91", flag: "🇮🇳" },
+  { code: "SA", name: "Saudi Arabia", dialCode: "+966", flag: "🇸🇦" },
+  { code: "AE", name: "United Arab Emirates", dialCode: "+971", flag: "🇦🇪" },
+  { code: "DE", name: "Germany", dialCode: "+49", flag: "🇩🇪" },
+  { code: "FR", name: "France", dialCode: "+33", flag: "🇫🇷" },
+  { code: "NL", name: "Netherlands", dialCode: "+31", flag: "🇳🇱" },
+  { code: "NZ", name: "New Zealand", dialCode: "+64", flag: "🇳🇿" },
+  { code: "HK", name: "Hong Kong", dialCode: "+852", flag: "🇭🇰" },
+  { code: "TW", name: "Taiwan", dialCode: "+886", flag: "🇹🇼" },
+];
 
 interface FormState {
   tenant_name: string;
@@ -23,6 +54,12 @@ export function RegistrationForm({
     owner_phone: "",
   });
 
+  const [countryCode, setCountryCode] = useState<string>("+62");
+  const [phoneNational, setPhoneNational] = useState<string>("");
+
+  const currentCountry =
+    COUNTRY_DIAL_CODES.find((c) => c.dialCode === countryCode) || COUNTRY_DIAL_CODES[0];
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPendingNotice, setIsPendingNotice] = useState(false);
@@ -33,6 +70,30 @@ export function RegistrationForm({
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errorMessage) setErrorMessage(null);
     if (isPendingNotice) setIsPendingNotice(false);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const sanitized = rawValue.replace(/[^\d\s\-()]/g, "");
+    setPhoneNational(sanitized);
+
+    const cleanDigits = sanitized.replace(/\D/g, "").replace(/^0+/, "");
+    const fullPhone = cleanDigits ? `${countryCode}${cleanDigits}` : "";
+    setFormData((prev) => ({ ...prev, owner_phone: fullPhone }));
+
+    if (errorMessage) setErrorMessage(null);
+    if (isPendingNotice) setIsPendingNotice(false);
+  };
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newCode = e.target.value;
+    setCountryCode(newCode);
+
+    const cleanDigits = phoneNational.replace(/\D/g, "").replace(/^0+/, "");
+    const fullPhone = cleanDigits ? `${newCode}${cleanDigits}` : "";
+    setFormData((prev) => ({ ...prev, owner_phone: fullPhone }));
+
+    if (errorMessage) setErrorMessage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,6 +116,17 @@ export function RegistrationForm({
       return;
     }
 
+    const cleanDigits = phoneNational.replace(/\D/g, "").replace(/^0+/, "");
+    if (!cleanDigits) {
+      setErrorMessage("Phone or WhatsApp number is required.");
+      return;
+    }
+    if (cleanDigits.length < 6 || cleanDigits.length > 15) {
+      setErrorMessage("Please enter a valid phone number (6-15 digits).");
+      return;
+    }
+    const fullPhone = `${countryCode}${cleanDigits}`;
+
     setIsLoading(true);
 
     try {
@@ -68,7 +140,7 @@ export function RegistrationForm({
           tenant_name: formData.tenant_name.trim(),
           owner_name: formData.owner_name.trim(),
           owner_email: formData.owner_email.trim(),
-          owner_phone: formData.owner_phone.trim() || undefined,
+          owner_phone: fullPhone,
         }),
       });
 
@@ -93,6 +165,8 @@ export function RegistrationForm({
   };
 
   const handleReset = () => {
+    setCountryCode("+62");
+    setPhoneNational("");
     setFormData({
       tenant_name: "",
       owner_name: "",
@@ -114,7 +188,9 @@ export function RegistrationForm({
             <h2 className="text-xl font-medium tracking-tight text-zinc-950">
               Registration Successful
             </h2>
-            <p className="text-xs text-zinc-500">Your workspace has been initialized in the system.</p>
+            <p className="text-xs text-zinc-500">
+              Step 1 of 3 completed. Proceed to set your master password.
+            </p>
           </div>
         </div>
 
@@ -133,55 +209,44 @@ export function RegistrationForm({
             <span className="font-medium text-zinc-900">{formData.owner_email}</span>
           </div>
           <div className="py-2.5 flex justify-between items-center">
+            <span className="text-zinc-500">Phone / WhatsApp</span>
+            <span className="font-medium text-zinc-900">{formData.owner_phone}</span>
+          </div>
+          <div className="py-2.5 flex justify-between items-center">
             <span className="text-zinc-500">Tenant ID</span>
             <span className="font-sans font-medium text-zinc-700">#{successResult.tenant_id}</span>
           </div>
         </div>
 
-        {/* Local magic link direct activation or email notice */}
+        {/* Next step: Account Activation & Password Setup */}
         {successResult.onboarding.activation_url ? (
-          <div className="p-4 rounded-md border border-amber-200 bg-amber-50/60 text-xs text-amber-900 space-y-2">
-            <p className="font-medium">Development Mode: Activation Link Ready</p>
-            <p className="text-amber-800 leading-relaxed">
-              You can activate your account and configure your master password immediately:
-            </p>
+          <div className="space-y-3 pt-1">
+            <div className="text-xs text-zinc-600 space-y-1">
+              <p className="font-medium text-zinc-900">Next Step: Account Activation</p>
+              <p className="text-zinc-500 leading-relaxed">
+                Configure your master password to activate your account and start workspace setup.
+              </p>
+            </div>
             <a
               href={successResult.onboarding.activation_url}
               style={{ backgroundColor: "#141413", color: "#ffffff" }}
-              className="btn-primary-black inline-flex w-full items-center justify-center gap-2 rounded-md font-medium px-4 h-10 text-xs transition active:scale-[0.98]"
+              className="btn-primary-black inline-flex w-full items-center justify-center gap-2 rounded-md font-medium px-4 h-10 text-xs transition active:scale-[0.98] cursor-pointer"
             >
-              Activate Account &amp; Set Password ➜
+              Set Master Password &amp; Activate Account
             </a>
           </div>
         ) : (
           <div className="p-4 rounded-md border border-zinc-200 bg-zinc-50 text-xs text-zinc-600 space-y-1">
-            <p className="font-medium text-zinc-900">Check Your Email</p>
+            <p className="font-medium text-zinc-900">Next Step: Check Your Email</p>
             <p className="leading-relaxed">
               An activation link has been sent to{" "}
               <strong className="text-zinc-900 font-semibold">
                 {successResult.onboarding.email_sent_to}
               </strong>
-              . Follow the link to complete your master password configuration.
+              . Follow the link to create your master password and complete your registration.
             </p>
           </div>
         )}
-
-        <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
-          <a
-            href={posLoginUrl}
-            style={{ backgroundColor: "#141413", color: "#ffffff" }}
-            className="btn-primary-black flex-1 inline-flex items-center justify-center h-10 rounded-md text-xs font-medium transition active:scale-[0.98]"
-          >
-            Open POS Sign In
-          </a>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="inline-flex items-center justify-center h-10 px-4 rounded-md border border-zinc-300 bg-white text-xs font-medium text-zinc-700 hover:bg-zinc-50 transition active:scale-[0.98] cursor-pointer"
-          >
-            Register Another Business
-          </button>
-        </div>
       </div>
     );
   }
@@ -280,18 +345,43 @@ export function RegistrationForm({
         {/* Owner Phone */}
         <div>
           <label htmlFor="reg-phone" className="block text-[13px] font-medium text-zinc-800 mb-1.5">
-            Phone or WhatsApp{" "}
-            <span className="text-zinc-400 font-normal text-xs">(Optional)</span>
+            Phone or WhatsApp
           </label>
-          <input
-            id="reg-phone"
-            name="owner_phone"
-            type="tel"
-            value={formData.owner_phone}
-            onChange={handleChange}
-            placeholder="+62 812 3456 7890"
-            className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
-          />
+          <div className="flex h-10 w-full rounded-md border border-zinc-300 bg-white shadow-2xs transition-all focus-within:border-zinc-950 focus-within:ring-1 focus-within:ring-zinc-950">
+            <div className="relative flex items-center border-r border-zinc-200 bg-zinc-50/80 hover:bg-zinc-100/80 transition-colors rounded-l-md px-2.5">
+              <div className="flex items-center gap-1.5 pointer-events-none select-none text-xs font-medium text-zinc-800">
+                <span className="text-sm leading-none" role="img" aria-label={currentCountry.name}>
+                  {currentCountry.flag}
+                </span>
+                <span>{countryCode}</span>
+                <ChevronDown className="h-3.5 w-3.5 text-zinc-400" />
+              </div>
+              <select
+                id="reg-country-code"
+                name="country_code"
+                aria-label="Country calling code"
+                value={countryCode}
+                onChange={handleCountryChange}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-xs"
+              >
+                {COUNTRY_DIAL_CODES.map((c) => (
+                  <option key={c.code} value={c.dialCode}>
+                    {c.flag} {c.name} ({c.dialCode})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <input
+              id="reg-phone"
+              name="owner_phone"
+              type="tel"
+              required
+              value={phoneNational}
+              onChange={handlePhoneChange}
+              placeholder="812 3456 7890"
+              className="flex-1 h-full px-3 text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none bg-transparent"
+            />
+          </div>
         </div>
 
         {/* Submit Button */}

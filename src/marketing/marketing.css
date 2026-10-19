@@ -684,16 +684,8 @@ table {
 }
 
 .mega-link-title::after {
-  content: "→";
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 0.8125rem;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition:
-    opacity 0.2s var(--ease-cinematic),
-    transform 0.2s var(--ease-cinematic);
-  color: rgba(255, 255, 255, 0.85);
+  content: "";
+  display: none;
 }
 
 .mega-link:hover .mega-link-title {

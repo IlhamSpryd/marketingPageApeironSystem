@@ -419,7 +419,7 @@ export function ApeironChatWidget() {
                                   }}
                                 >
                                   <span style={{ color: "#ffffff" }}>
-                                    Inisialisasi Workspace Bisnis →
+                                    Inisialisasi Workspace Bisnis
                                   </span>
                                 </Link>
                               </div>
@@ -506,7 +506,7 @@ export function ApeironChatWidget() {
                 onClick={() => setIsOpen(false)}
                 className="text-zinc-800 hover:text-zinc-500 font-medium transition-colors cursor-pointer"
               >
-                Inisialisasi Tenant →
+                Inisialisasi Tenant
               </Link>
             </div>
           </div>

@@ -87,7 +87,7 @@ export const markup = `
               <span class="mega-spotlight-label">Architecture</span>
               <h3 class="mega-spotlight-title">Zero-Latency Live Sync</h3>
               <p class="mega-spotlight-text">Continuous event stream keeping counter registers, kitchen lines, and central HQ in real-time lockstep.</p>
-              <a href="#system" class="mega-spotlight-link">Explore architecture <span>&rarr;</span></a>
+              <a href="#system" class="mega-spotlight-link">Explore architecture</a>
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ export const markup = `
               <span class="mega-spotlight-label">Multi-Branch Governance</span>
               <h3 class="mega-spotlight-title">Scale with Clarity</h3>
               <p class="mega-spotlight-text">Maintain complete operational oversight and team accountability without micromanaging daily branch shifts.</p>
-              <a href="#branches" class="mega-spotlight-link">See multi-branch HQ <span>&rarr;</span></a>
+              <a href="#branches" class="mega-spotlight-link">See multi-branch HQ</a>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export const markup = `
               <span class="mega-spotlight-label">Integrity</span>
               <h3 class="mega-spotlight-title">Operational Records</h3>
               <p class="mega-spotlight-text">Completed transactions are durable records. Corrections go through reversals, not silent edits.</p>
-              <a href="#integrity" class="mega-spotlight-link">View security architecture <span>&rarr;</span></a>
+              <a href="#integrity" class="mega-spotlight-link">View security architecture</a>
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@ export const markup = `
               <span class="mega-spotlight-label">Instant Access</span>
               <h3 class="mega-spotlight-title">Interactive Live POS</h3>
               <p class="mega-spotlight-text">Try real-time orders, recipe deductions, and kitchen tickets right in your browser.</p>
-              <a href="#product" class="mega-spotlight-link">Try interactive demo <span>&rarr;</span></a>
+              <a href="#product" class="mega-spotlight-link">Try interactive demo</a>
             </div>
           </div>
         </div>
