@@ -21,7 +21,10 @@ export function RegisterPage() {
     "http://localhost:8000/login";
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full bg-white overflow-x-hidden font-sans antialiased text-zinc-950 selection:bg-zinc-900 selection:text-white">
+    <div
+      className="min-h-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 w-full bg-white overflow-x-hidden font-sans antialiased text-zinc-950 selection:bg-zinc-900 selection:text-white"
+      style={{ fontFeatureSettings: "normal" }}
+    >
       {/* LEFT: REGISTRATION FORM CONTENT */}
       <div className="md:col-span-1 lg:col-span-7 flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 w-full relative bg-white min-h-screen">
         {/* Form Mount strictly clamped to max-w-sm / 384px */}

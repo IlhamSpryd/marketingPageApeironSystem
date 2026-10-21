@@ -230,7 +230,7 @@ export function RegistrationForm({
             <a
               href={successResult.onboarding.activation_url}
               style={{ backgroundColor: "#141413", color: "#ffffff" }}
-              className="btn-primary-black inline-flex w-full items-center justify-center gap-2 rounded-md font-medium px-4 h-10 text-xs transition active:scale-[0.98] cursor-pointer"
+              className="btn-primary-black inline-flex w-full items-center justify-center gap-2 rounded-md font-medium px-4 h-10 text-[13px] transition active:scale-[0.98] cursor-pointer"
             >
               Set Master Password &amp; Activate Account
             </a>
@@ -390,7 +390,7 @@ export function RegistrationForm({
             type="submit"
             disabled={isLoading}
             style={{ backgroundColor: "#141413", color: "#ffffff" }}
-            className="btn-primary-black w-full h-10 px-4 rounded-md font-medium transition-colors flex items-center justify-center gap-2 text-white text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-xs active:scale-[0.99]"
+            className="btn-primary-black w-full h-10 px-4 rounded-md font-medium transition-colors flex items-center justify-center gap-2 text-white text-[13px] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-xs active:scale-[0.99]"
           >
             {isLoading ? (
               <>

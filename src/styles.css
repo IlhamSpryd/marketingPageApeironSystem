@@ -188,6 +188,17 @@
 .btn-primary-black {
   background-color: #141413 !important;
   color: #ffffff !important;
+  font-family: var(--font-sans) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
+  font-feature-settings: normal !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  line-height: 1.5 !important;
+  letter-spacing: normal !important;
+  height: 40px !important;
+  padding: 0 16px !important;
 }
 .btn-primary-black:hover:not(:disabled) {
   background-color: #27272a !important;
