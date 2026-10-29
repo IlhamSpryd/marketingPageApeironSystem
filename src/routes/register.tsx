@@ -78,7 +78,8 @@ export function RegisterPage() {
         <div className="relative z-10 my-auto max-w-xs space-y-8">
           <div className="space-y-2">
             <p className="text-lg font-normal tracking-tight text-zinc-100 leading-snug">
-              Point of sale, inventory ledger, and cashier reconciliation built for modern hospitality.
+              Point of sale, inventory ledger, and cashier reconciliation built for modern
+              hospitality.
             </p>
           </div>
 

@@ -64,8 +64,7 @@ export function getGeminiApiKey(env?: unknown): string {
 
   // 2. Check process.env
   if (typeof process !== "undefined" && process.env) {
-    const fromProcess =
-      process.env["GEMINI_API_KEY"] || process.env["VITE_GEMINI_API_KEY"];
+    const fromProcess = process.env["GEMINI_API_KEY"] || process.env["VITE_GEMINI_API_KEY"];
     if (fromProcess && fromProcess.trim()) {
       return fromProcess.trim();
     }
@@ -90,9 +89,7 @@ export function getGeminiApiKey(env?: unknown): string {
     for (const p of envPaths) {
       if (fs.existsSync(p)) {
         const content = fs.readFileSync(p, "utf-8");
-        const match = content.match(
-          /^\s*(?:VITE_)?GEMINI_API_KEY\s*=\s*["']?([^"'\r\n]+)["']?/m,
-        );
+        const match = content.match(/^\s*(?:VITE_)?GEMINI_API_KEY\s*=\s*["']?([^"'\r\n]+)["']?/m);
         if (match && match[1] && match[1].trim()) {
           return match[1].trim();
         }

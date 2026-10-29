@@ -1,13 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  X,
-  Send,
-  Copy,
-  Check,
-  Bot,
-  Loader2,
-} from "lucide-react";
+import { X, Send, Copy, Check, Bot, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,8 +12,7 @@ export interface MessageItem {
   timestamp: string;
 }
 
-const INITIAL_GREETING =
-  "Halo, \nSaya Apeiron AI. Ada yang bisa saya bantu?";
+const INITIAL_GREETING = "Halo, \nSaya Apeiron AI. Ada yang bisa saya bantu?";
 
 /**
  * Formats basic markdown elements (bold, bullet points, numbered lists, inline code)
@@ -143,8 +135,6 @@ export function ApeironChatWidget() {
     setTimeout(() => setCopiedId(null), 1800);
   };
 
-
-
   const sendMessage = async (textToSend: string) => {
     const text = textToSend.trim();
     if (!text || isLoading) return;
@@ -199,9 +189,7 @@ export function ApeironChatWidget() {
       setMessages((prev) => [...prev, botMessage]);
     } catch (err: unknown) {
       const errMsg =
-        err instanceof Error
-          ? err.message
-          : "Maaf, terjadi kendala saat menghubungkan ke AI.";
+        err instanceof Error ? err.message : "Maaf, terjadi kendala saat menghubungkan ke AI.";
 
       const errorMessage: MessageItem = {
         id: "err-" + Date.now(),
@@ -385,10 +373,11 @@ export function ApeironChatWidget() {
                       )}
 
                       <div
-                        className={`relative group rounded-xl px-3.5 py-2.5 shadow-2xs ${isUser
-                          ? "bg-zinc-950 text-white rounded-tr-xs"
-                          : "bg-white text-zinc-800 rounded-tl-xs border border-zinc-200/90"
-                          }`}
+                        className={`relative group rounded-xl px-3.5 py-2.5 shadow-2xs ${
+                          isUser
+                            ? "bg-zinc-950 text-white rounded-tr-xs"
+                            : "bg-white text-zinc-800 rounded-tl-xs border border-zinc-200/90"
+                        }`}
                         style={
                           isUser
                             ? { backgroundColor: "#09090b", color: "#ffffff" }
@@ -452,9 +441,7 @@ export function ApeironChatWidget() {
                       </div>
                     </div>
 
-                    <span
-                      className={`text-[9px] text-zinc-400 mt-0.5 ${isUser ? "pr-1" : "pl-7"}`}
-                    >
+                    <span className={`text-[9px] text-zinc-400 mt-0.5 ${isUser ? "pr-1" : "pl-7"}`}>
                       {msg.timestamp}
                     </span>
                   </div>

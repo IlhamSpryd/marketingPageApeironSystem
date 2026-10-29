@@ -255,7 +255,9 @@ export function RegistrationForm({
     <div className="w-full text-zinc-950">
       {/* Heading Block */}
       <div className="mb-6">
-        <h1 className="text-2xl font-medium tracking-tight text-zinc-950">Register your business</h1>
+        <h1 className="text-2xl font-medium tracking-tight text-zinc-950">
+          Register your business
+        </h1>
         <p className="text-sm text-zinc-500 mt-1.5 leading-relaxed">
           Complete the details below to create your Apeiron POS operational workspace.
         </p>
@@ -334,7 +336,7 @@ export function RegistrationForm({
             required
             value={formData.owner_email}
             onChange={handleChange}
-            placeholder="name@company.com"
+            placeholder="Enter your Email"
             className="field-input w-full h-10 px-3 rounded-md border border-zinc-300 bg-white text-sm text-zinc-950 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 focus:ring-1 focus:ring-zinc-950 transition-all shadow-2xs"
           />
           <p className="mt-1 text-xs text-zinc-400">

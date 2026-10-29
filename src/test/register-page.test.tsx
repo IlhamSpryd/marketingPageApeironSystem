@@ -81,8 +81,8 @@ describe("RegisterPage Typography & Chatbot Absence", () => {
             onboarding_token: "sample-token",
           },
         }),
-        { status: 201, headers: { "Content-Type": "application/json" } }
-      )
+        { status: 201, headers: { "Content-Type": "application/json" } },
+      ),
     );
 
     render(<RegistrationForm posLoginUrl="http://localhost:8000/login" />);
@@ -108,16 +108,25 @@ describe("RegisterPage Typography & Chatbot Absence", () => {
     // Verify absence of the yellow development mode badge pill and texts
     expect(screen.queryByText(/Development Mode: Activation Link Ready/i)).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/You can activate your account and configure your master password immediately/i)
+      screen.queryByText(
+        /You can activate your account and configure your master password immediately/i,
+      ),
     ).not.toBeInTheDocument();
 
     // Verify presence of clean master password setup CTA button
-    const activateBtn = screen.getByRole("link", { name: /Set Master Password & Activate Account/i });
+    const activateBtn = screen.getByRole("link", {
+      name: /Set Master Password & Activate Account/i,
+    });
     expect(activateBtn).toBeInTheDocument();
-    expect(activateBtn).toHaveAttribute("href", "http://localhost:8000/onboarding/set-password/sample-token");
+    expect(activateBtn).toHaveAttribute(
+      "href",
+      "http://localhost:8000/onboarding/set-password/sample-token",
+    );
 
     // Verify absence of premature login and reset buttons
     expect(screen.queryByRole("link", { name: /Open POS Sign In/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /Register Another Business/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Register Another Business/i }),
+    ).not.toBeInTheDocument();
   });
 });
