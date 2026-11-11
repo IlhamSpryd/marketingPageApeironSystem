@@ -31,7 +31,8 @@ export const Route = createFileRoute("/")({
 function Index() {
   const posLoginUrl =
     (typeof process !== "undefined" && process.env?.["VITE_APEIRON_POS_LOGIN_URL"]) ||
-    "http://localhost:8000/login";
+    (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_APEIRON_POS_LOGIN_URL) ||
+    "https://app.apeironsystem.web.id/login";
 
   const html = useMemo(() => {
     return markup

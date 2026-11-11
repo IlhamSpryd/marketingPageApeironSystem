@@ -45,7 +45,7 @@ interface RegistrationFormProps {
 }
 
 export function RegistrationForm({
-  posLoginUrl = "http://localhost:8000/login",
+  posLoginUrl = "https://app.apeironsystem.web.id/login",
 }: RegistrationFormProps) {
   const [formData, setFormData] = useState<FormState>({
     tenant_name: "",

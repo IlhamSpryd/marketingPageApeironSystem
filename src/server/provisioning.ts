@@ -87,7 +87,7 @@ export async function submitRegistrationToPos(
   }
 
   const posApiUrl =
-    process.env["APEIRON_POS_API_URL"] || "http://localhost:8000/api/v1/provisioning/registrations";
+    process.env["APEIRON_POS_API_URL"] || "https://app.apeironsystem.web.id/api/v1/provisioning/registrations";
   const posSecret =
     process.env["APEIRON_POS_PROVISIONING_SECRET"] || "local-provisioning-secret-apeiron-2026";
 
